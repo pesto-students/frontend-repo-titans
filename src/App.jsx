@@ -1,25 +1,30 @@
 import './App.css'
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from './components/Navbar';
-import SearchPage from './Pages/SearchPage';
-import Bookings from './Pages/Bookings';
-import Login from './Pages/Login';
-import Register from './Pages/Register';
-import Home from './Pages/Home';
+import { Route, Routes } from "react-router-dom";
+import LandingPage from './Pages/GymUserPages/LandingPage';
+import Home from './Pages/GymUserPages/Home';
+import SearchPage from './Pages/GymUserPages/SearchPage';
+import Bookings from './Pages/GymUserPages/Bookings';
+import Login from './Pages/GymUserPages/Login';
+import Register from './Pages/GymUserPages/Register';
+import Navbar from './components/Navbar'
+import Footer from './components/Footer';
 
 function App() {
   return (
     <>
-    <Router>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/search" element={<SearchPage />} />
-      <Route path="/bookings" element={<Bookings />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-    </Routes>
-  </Router>
+      <Navbar  />
+
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/bookings" element={<Bookings />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+
+      <Footer />
+
     </>
   )
 }

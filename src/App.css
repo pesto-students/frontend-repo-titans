@@ -1,5 +1,6 @@
 body {
   color: #f1f5f9;
+  background-color: #000000E6;
 }
 
 .raleway {
@@ -7,4 +8,12 @@ body {
   font-optical-sizing: auto;
   font-weight: 900;
   font-style: normal;
+}
+
+.imp-flex{
+  display: flex !important;
+}
+
+.show-on-sm {
+  display: block !important;
 }
