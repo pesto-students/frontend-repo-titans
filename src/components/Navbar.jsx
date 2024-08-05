@@ -56,7 +56,7 @@ const Navbar = () => {
 
 
         {/* Mobile Menu */}
-        <ul className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-800  ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'} nav-menu`}>
+        <ul className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-wwbg  ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'} nav-menu`}>
           <li className="nav-item">
             <NavLink to="/home"  onClick={closeMenu}>Home</NavLink>
           </li>
