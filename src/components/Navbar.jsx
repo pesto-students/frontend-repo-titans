@@ -11,13 +11,13 @@ const Navbar = () => {
   const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="header border-b-2 border-b-red-700 sticky">
+    <header className="sticky border-b-2 header border-b-red-700">
       <nav className="navbar">
         <span id='logo'>
 
-          <Link to="/" className="logo flex items-center">
+          <Link to="/" className="flex items-center logo">
             <span className="text-red-700 raleway">Workout</span>
-            <GiLibertyWing className="text-slate-50 inline pl-1" size={20} />
+            <GiLibertyWing className="inline pl-1 text-slate-50" size={20} />
           </Link>
         </span>
 
@@ -30,24 +30,24 @@ const Navbar = () => {
 
 
         {/* Desktop Menu */}
-        <ul className="md:flex space-x-4 nav-menu">
+        <ul className="space-x-4 md:flex nav-menu">
 
           <li className="nav-item">
-            <NavLink to="/home" className="text-red-500" onClick={closeMenu}>Home</NavLink>
+            <NavLink  to="/home" onClick={closeMenu}>Home</NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/search" className="text-red-500" onClick={closeMenu}>SearchGYM</NavLink>
+            <NavLink to="/search"  onClick={closeMenu}>Search</NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/bookings" className="text-red-500" onClick={closeMenu}>Bookings</NavLink>
+            <NavLink to="/bookings"  onClick={closeMenu}>Bookings</NavLink>
           </li>
 
 
           <li className="nav-item">
-            <Link to="/login" className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent" onClick={closeMenu}>Login</Link>
+            <Link to="/login" className="px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 hover:bg-red-500 hover:text-white hover:border-transparent" onClick={closeMenu}>Login</Link>
           </li>
           <li className="nav-item">
-            <Link to="/register" className="bg-red-700 hover:bg-red-800 text-slate-100 font-semibold py-2 px-4 border border-red-300 shadow" onClick={closeMenu}>Register</Link>
+            <Link to="/register" className="px-4 py-2 font-semibold bg-red-700 border border-red-300 shadow hover:bg-red-800 text-slate-100" onClick={closeMenu}>Register</Link>
           </li>
         </ul>
 
@@ -58,21 +58,21 @@ const Navbar = () => {
         {/* Mobile Menu */}
         <ul className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-gray-800  ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'} nav-menu`}>
           <li className="nav-item">
-            <NavLink to="/home" className="text-red-500" onClick={closeMenu}>Home</NavLink>
+            <NavLink to="/home"  onClick={closeMenu}>Home</NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/search" className="text-red-500" onClick={closeMenu}>SearchGYM</NavLink>
+            <NavLink to="/search"  onClick={closeMenu}>Search</NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/bookings" className="text-red-500" onClick={closeMenu}>Bookings</NavLink>
+            <NavLink to="/bookings"  onClick={closeMenu}>Bookings</NavLink>
           </li>
           <li className="nav-item">
-            <Link to="/login" className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded" onClick={closeMenu}>Login</Link>
+            <Link to="/login" className="px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 rounded hover:bg-red-500 hover:text-white hover:border-transparent" onClick={closeMenu}>Login</Link>
           </li>
           <li className="nav-item">
-            <Link to="/register" className="bg-red-700 hover:bg-red-800 text-slate-100 font-semibold py-2 px-4 border border-slate-300 rounded shadow" onClick={closeMenu}>Register</Link>
+            <Link to="/register" className="px-4 py-2 font-semibold bg-red-700 border rounded shadow hover:bg-red-800 text-slate-100 border-slate-300" onClick={closeMenu}>Register</Link>
           </li>
-          <button className="absolute top-4 right-4 text-white" onClick={closeMenu}>
+          <button className="absolute text-white top-4 right-4" onClick={closeMenu}>
             <FaTimes size={30} />
           </button>
         </ul>
