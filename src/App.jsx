@@ -8,6 +8,8 @@ import Login from './Pages/GymUserPages/Login';
 import Register from './Pages/GymUserPages/Register';
 import Navbar from './components/Navbar'
 import Footer from './components/Footer';
+import GymDetails from './Pages/GymUserPages/GymDetails';
+import PageNotFound from './Pages/Error/PageNotFound';
 
 function App() {
   return (
@@ -21,6 +23,9 @@ function App() {
         <Route path="/bookings" element={<Bookings />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/gymDetails" element={<GymDetails />} />
+        <Route path="*" element={<PageNotFound />} />
+
       </Routes>
 
       <Footer />

@@ -39,10 +39,6 @@ color{
     color: aliceblue;
 }
 
-.header .nav-item a:hover {
-    padding-bottom: 12px;
-    border-bottom: 3px solid var(--secondary-color);
-}
 
 .hamburger {
     display: none;
@@ -81,7 +77,8 @@ color{
     }
 
     .nav-item {
-        margin: 1.5rem 0;
+        margin: 1.2rem 0;
+        padding: 0 !important;
     }
 
     .header .navbar img {
