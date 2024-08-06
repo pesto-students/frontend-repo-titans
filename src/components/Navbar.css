@@ -34,15 +34,11 @@ color{
 }
 
 .header .nav-item {
-    padding: 1rem;
+
     font-weight: 500;
     color: aliceblue;
 }
 
-.header .nav-item a:hover {
-    padding-bottom: 12px;
-    border-bottom: 3px solid var(--secondary-color);
-}
 
 .hamburger {
     display: none;
