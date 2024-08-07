@@ -13,20 +13,25 @@ import PageNotFound from './Pages/Error/PageNotFound'
 // Main application component
 function App() {
   return (
-    <>
-      <Layout>
-        <Routes>
-          <Route path='/' element={<LandingPage />} />
-          <Route path='/home' element={<Home />} />
-          <Route path='/search' element={<SearchPage />} />
-          <Route path='/bookings' element={<Bookings />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          <Route path='/gymDetails' element={<GymDetails />} />
-          <Route path='*' element={<PageNotFound />} />
-        </Routes>
-      </Layout>
-    </>
+    <Routes>
+      <Route
+        path='*'
+        element={
+            <Layout>
+              <Routes>
+                <Route path='/' element={<LandingPage />} />
+                <Route path='/home' element={<Home />} />
+                <Route path='/search' element={<SearchPage />} />
+                <Route path='/bookings' element={<Bookings />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/register' element={<Register />} />
+                <Route path='/gymDetails' element={<GymDetails />} />
+                <Route path='*' element={<PageNotFound />} />
+              </Routes>
+            </Layout>
+        }
+      />
+    </Routes>
   )
 }
 
