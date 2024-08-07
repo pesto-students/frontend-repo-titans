@@ -47,7 +47,7 @@ const Navbar = () => {
             <Link to="/login" className="px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 hover:bg-red-500 hover:text-white hover:border-transparent" onClick={closeMenu}>Login</Link>
           </li>
           <li className="nav-item">
-            <Link to="/register" className="px-4 py-2 font-semibold bg-red-700 border border-red-300 shadow hover:bg-red-800 text-slate-100" onClick={closeMenu}>Register</Link>
+            <Link to="/register" className="px-4 py-2 font-semibold bg-red-700 border border-red-300 shadow hover:bg-red-500 text-slate-100" onClick={closeMenu}>Register</Link>
           </li>
         </ul>
 
