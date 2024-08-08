@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
@@ -16,12 +16,18 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { refreshAuthState } = useAuth()
+  const { authState, refreshAuthState } = useAuth()
   const navigate = useNavigate()
   const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const location = useLocation()
   const from = location.state?.from || '/home' // Get redirect location or provide fallback
+
+  useEffect(() => {
+    if (authState) {
+      navigate('/home')
+    }
+  })
 
   const onSubmit = async (data) => {
     deleteCookie()

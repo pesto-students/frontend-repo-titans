@@ -7,6 +7,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { IoCloseSharp } from 'react-icons/io5'
 import config from '../../config.js'
 import signup_img from '../../assets/images/signup.jpg'
+import useAuth from '../../hooks/useAuth'
 
 const Register = () => {
   const {
@@ -16,9 +17,16 @@ const Register = () => {
     watch,
   } = useForm()
   const navigate = useNavigate()
+  const { authState } = useAuth()
   const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  useEffect(() => {
+    if (authState) {
+      navigate('/home')
+    }
+  })
 
   // Watch password field to use for validation
   const password = watch('password')
