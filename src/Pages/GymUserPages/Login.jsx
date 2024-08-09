@@ -36,7 +36,7 @@ const Login = () => {
 
       const interval = IntervalTimer(() => {
         navigate('/home')
-      }, 5000)
+      }, 1)
 
       return () => clearInterval(interval)
     }
