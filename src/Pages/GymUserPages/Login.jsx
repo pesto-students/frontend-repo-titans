@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
 import { IoCloseSharp } from 'react-icons/io5'
+import useAuth from '../../hooks/useAuth'
 import config from '../../config.js'
 import signin_img from '../../assets/images/signin.jpg'
+import { deleteCookie } from '../../utils/auth.jsx'
+import { IntervalTimer } from '../../utils/intervalTimer'
 
 const Login = () => {
   const {
@@ -14,11 +18,32 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const navigate = useNavigate()
+  const { isAuthenticated, refreshAuthState } = useAuth()
   const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from || '/home' // Get redirect location or provide fallback
+
+  const notify = () =>
+    toast.error(
+      "You're currently logged in. To use a different account, please logout and try again."
+    )
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      notify()
+
+      const interval = IntervalTimer(() => {
+        navigate('/home')
+      }, 1)
+
+      return () => clearInterval(interval)
+    }
+  })
 
   const onSubmit = async (data) => {
+    deleteCookie()
     try {
       const response = await axios.post(
         `${config.BASE_BACKEND_URL}/api/auth/login`,
@@ -37,7 +62,9 @@ const Login = () => {
       // Handle successful login
       if (response.status === 200) {
         // Redirect the user to the home page or dashboard
-        navigate('/home')
+        // After successful login, refresh authentication state
+        refreshAuthState()
+        navigate(from, { replace: true })
       }
     } catch (error) {
       console.error('Error during login:', error)

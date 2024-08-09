@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
 import { IoCloseSharp } from 'react-icons/io5'
 import config from '../../config.js'
 import signup_img from '../../assets/images/signup.jpg'
+import useAuth from '../../hooks/useAuth'
+import { IntervalTimer } from '../../utils/intervalTimer'
 
 const Register = () => {
   const {
@@ -16,9 +19,27 @@ const Register = () => {
     watch,
   } = useForm()
   const navigate = useNavigate()
+  const { isAuthenticated } = useAuth()
   const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const notify = () =>
+    toast.error(
+      "You're currently logged in. To create a new account, please logout and try again."
+    )
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      notify()
+
+      const interval = IntervalTimer(() => {
+        navigate('/home')
+      }, 1)
+
+      return () => clearInterval(interval)
+    }
+  })
 
   // Watch password field to use for validation
   const password = watch('password')
