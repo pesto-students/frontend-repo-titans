@@ -11,6 +11,8 @@ import Register from './Pages/GymUserPages/Register'
 import GymDetails from './Pages/GymUserPages/GymDetails'
 import PageNotFound from './Pages/Error/PageNotFound'
 import Profile from './Pages/GymUserPages/Profile'
+import OwnerSignup from './Pages/GymOwner/OwnerSignup'
+import OwnerLogin from './Pages/GymOwner/OwnerLogin'
 
 // Main application component
 function App() {
@@ -33,6 +35,9 @@ function App() {
                 path='/user'
                 element={<PrivateRoute element={<Profile />} />}
               />
+              {/* Owner's Routes */}
+              <Route path='/owner/register' element={<OwnerSignup />} />
+              <Route path='/owner/login' element={<OwnerLogin />} />
             </Routes>
           </Layout>
         }
