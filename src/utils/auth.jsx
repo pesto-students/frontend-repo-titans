@@ -13,7 +13,7 @@ export const deleteCookie = (name = 'token') => {
 }
 
 // VALIDATION IF USER IS SIGNED IN
-export const isAuthenticated = () => {
+export const getAuthToken = () => {
   // Checking if the code is running in the browser
   if (typeof window === 'undefined') {
     return false

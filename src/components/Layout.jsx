@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
     <>
       {/* Toastify Notification */}
       <ToastContainer
-        position='bottom-right'
+        position='top-center'
         autoClose={4500}
         limit={1}
         hideProgressBar={false}

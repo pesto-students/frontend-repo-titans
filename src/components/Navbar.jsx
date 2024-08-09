@@ -11,7 +11,7 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
-  const { authState, refreshAuthState } = useAuth()
+  const { isAuthenticated, refreshAuthState } = useAuth()
 
   return (
     <header className='sticky border-b-2 header border-b-red-700'>
@@ -54,7 +54,7 @@ const Navbar = () => {
               Bookings
             </NavLink>
           </li>
-          {authState ? (
+          {isAuthenticated ? (
             <li className='nav-item'>
               <Link
                 to='#'
@@ -112,7 +112,7 @@ const Navbar = () => {
               Bookings
             </NavLink>
           </li>
-          {authState ? (
+          {isAuthenticated ? (
             <li className='nav-item'>
               <Link
                 to='#'

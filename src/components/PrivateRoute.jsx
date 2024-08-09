@@ -1,12 +1,12 @@
 import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { isAuthenticated } from '../utils/auth'
+import { getAuthToken } from '../utils/auth'
 
 const PrivateRoute = ({ element }) => {
   const location = useLocation()
 
-  return isAuthenticated() ? (
+  return getAuthToken() ? (
     element
   ) : (
     // Redirect to login page with the current location

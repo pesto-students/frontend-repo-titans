@@ -4,12 +4,12 @@ import config from '../../config.js'
 import useAuth from '../../hooks/useAuth' // Custom hook for authentication
 
 const Profile = () => {
-  const { authState } = useAuth() // Get authentication state
+  const { isAuthenticated } = useAuth() // Get authentication state
   const headers = {
-    Authorization: `Bearer ${authState}`, // Include the token in headers
+    Authorization: `Bearer ${isAuthenticated}`, // Include the token in headers
   }
 
-  console.log('Authorization: ', authState)
+  console.log('Authorization: ', isAuthenticated)
 
   const checkUser = async () => {
     try {
@@ -18,7 +18,7 @@ const Profile = () => {
         {},
         {
           headers: {
-            authorization: `Bearer ${authState}`,
+            authorization: `Bearer ${isAuthenticated}`,
           },
           withCredentials: true,
         }

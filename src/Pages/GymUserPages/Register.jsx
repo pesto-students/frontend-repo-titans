@@ -19,7 +19,7 @@ const Register = () => {
     watch,
   } = useForm()
   const navigate = useNavigate()
-  const { authState } = useAuth()
+  const { isAuthenticated } = useAuth()
   const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -30,7 +30,7 @@ const Register = () => {
     )
 
   useEffect(() => {
-    if (authState) {
+    if (isAuthenticated) {
       notify()
 
       const interval = IntervalTimer(() => {

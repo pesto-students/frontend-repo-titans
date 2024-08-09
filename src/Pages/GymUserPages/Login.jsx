@@ -18,7 +18,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { authState, refreshAuthState } = useAuth()
+  const { isAuthenticated, refreshAuthState } = useAuth()
   const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
@@ -31,7 +31,7 @@ const Login = () => {
     )
 
   useEffect(() => {
-    if (authState) {
+    if (isAuthenticated) {
       notify()
 
       const interval = IntervalTimer(() => {

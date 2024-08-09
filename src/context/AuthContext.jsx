@@ -1,24 +1,24 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import { isAuthenticated } from '../utils/auth' // Function to check JWT in cookies
+import React, { createContext, useState, useEffect } from 'react'
+import { getAuthToken } from '../utils/auth' // Function to check JWT in cookies
 import PropTypes from 'prop-types'
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  const [authState, setAuthState] = useState(null)
+  const [isAuthenticated, setAuthState] = useState(null)
 
   useEffect(() => {
     // Initialize authentication state
-    setAuthState(isAuthenticated())
+    setAuthState(getAuthToken())
   }, [])
 
   // Method to manually update authentication state
   const refreshAuthState = () => {
-    setAuthState(isAuthenticated())
+    setAuthState(getAuthToken())
   }
 
   return (
-    <AuthContext.Provider value={{ authState, refreshAuthState }}>
+    <AuthContext.Provider value={{ isAuthenticated, refreshAuthState }}>
       {children}
     </AuthContext.Provider>
   )

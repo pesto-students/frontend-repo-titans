@@ -8,7 +8,7 @@ import { IntervalTimer } from '../../utils/intervalTimer'
 // there is className called width-change in this File. we need to increase its width to make the page more appealing
 
 function LandingPage() {
-  const { authState } = useAuth()
+  const { isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const notify = () =>
     toast.error(
@@ -16,12 +16,12 @@ function LandingPage() {
     )
 
   useEffect(() => {
-    if (authState) {
+    if (isAuthenticated) {
       notify()
 
       const interval = IntervalTimer(() => {
         navigate('/home')
-      }, 5000)
+      }, 1)
 
       return () => clearInterval(interval)
     }
