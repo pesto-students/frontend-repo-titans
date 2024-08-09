@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import landingPageimage from '../../assets/landingPageImage.png'
 import profilePic from '../../assets/profileP.jpg'
 import useAuth from '../../hooks/useAuth'
@@ -9,12 +10,18 @@ import { IntervalTimer } from '../../utils/intervalTimer'
 function LandingPage() {
   const { authState } = useAuth()
   const navigate = useNavigate()
+  const notify = () =>
+    toast.error(
+      "You're currently logged in. To use a different account, please logout and try again."
+    )
 
   useEffect(() => {
     if (authState) {
+      notify()
+
       const interval = IntervalTimer(() => {
         navigate('/home')
-      }, 4000)
+      }, 5000)
 
       return () => clearInterval(interval)
     }

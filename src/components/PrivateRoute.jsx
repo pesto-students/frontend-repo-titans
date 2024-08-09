@@ -1,5 +1,6 @@
 import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { isAuthenticated } from '../utils/auth'
 
 const PrivateRoute = ({ element }) => {
@@ -14,3 +15,7 @@ const PrivateRoute = ({ element }) => {
 }
 
 export default PrivateRoute
+
+PrivateRoute.propTypes = {
+  element: PropTypes.node.isRequired, // Ensures children is a valid React node
+}

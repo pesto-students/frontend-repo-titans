@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
 import { IoCloseSharp } from 'react-icons/io5'
@@ -9,6 +10,7 @@ import useAuth from '../../hooks/useAuth'
 import config from '../../config.js'
 import signin_img from '../../assets/images/signin.jpg'
 import { deleteCookie } from '../../utils/auth.jsx'
+import { IntervalTimer } from '../../utils/intervalTimer'
 
 const Login = () => {
   const {
@@ -17,15 +19,26 @@ const Login = () => {
     formState: { errors },
   } = useForm()
   const { authState, refreshAuthState } = useAuth()
-  const navigate = useNavigate()
   const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from || '/home' // Get redirect location or provide fallback
 
+  const notify = () =>
+    toast.error(
+      "You're currently logged in. To use a different account, please logout and try again."
+    )
+
   useEffect(() => {
     if (authState) {
-      navigate('/home')
+      notify()
+
+      const interval = IntervalTimer(() => {
+        navigate('/home')
+      }, 5000)
+
+      return () => clearInterval(interval)
     }
   })
 
