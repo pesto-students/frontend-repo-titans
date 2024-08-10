@@ -13,7 +13,7 @@ const Profile = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, user } = useAuth()
   const [image, setImage] = useState(profile_img)
   const [selectedFile, setSelectedFile] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -89,7 +89,7 @@ const Profile = () => {
       if (response.status === 200) {
         // Redirect the user to the home page or dashboard
         // After successful login, refresh authentication state
-        toast.error('Your details saved successfully')
+        toast.success('Your details saved successfully')
       }
     } catch (error) {
       console.error('Error while saving user details:', error)
@@ -116,7 +116,7 @@ const Profile = () => {
             <div className='flex justify-center'>
               <div className='relative'>
                 <img
-                  src={image}
+                  src={user?.profileImage || image}
                   alt='Profile'
                   className='w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-red-700'
                 />
@@ -261,7 +261,7 @@ const Profile = () => {
                     message: 'Number must be at least 1',
                   },
                   max: {
-                    value: 100,
+                    value: 9999999999,
                     message: 'Number must be at most 100',
                   },
                   pattern: {

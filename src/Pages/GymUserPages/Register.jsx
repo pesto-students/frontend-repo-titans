@@ -62,6 +62,7 @@ const Register = () => {
 
       // Handle successful login
       if (response.status === 200) {
+        toast.success(response.data.message)
         // Redirect the user to the home page or dashboard
         navigate('/login')
       }

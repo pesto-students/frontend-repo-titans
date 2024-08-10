@@ -16,7 +16,7 @@ const OwnerLogin = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { isAuthenticated, refreshAuthState } = useAuth()
+  const { isAuthenticated, refreshAuthState, updateUserState } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -56,6 +56,15 @@ const OwnerLogin = () => {
 
       // Handle successful login
       if (response.status === 200) {
+        toast.success(response.data.message)
+
+        updateUserState({
+          message: response.data.message,
+          profileImage:
+            'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61',
+        })
+
+        console.log('Logged In data : ', response.data)
         // Redirect the user to the home page or dashboard
         // After successful login, refresh authentication state
         refreshAuthState()
