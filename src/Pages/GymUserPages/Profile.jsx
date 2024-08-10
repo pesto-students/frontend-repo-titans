@@ -16,7 +16,6 @@ const Profile = () => {
   const { isAuthenticated } = useAuth()
   const [image, setImage] = useState(profile_img)
   const [selectedFile, setSelectedFile] = useState(null)
-  const [serverError, setServerError] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeButton, setActiveButton] = useState('Early Morning')
 
@@ -66,7 +65,7 @@ const Profile = () => {
 
   console.log('Authorization: ', isAuthenticated)
 
-  const onSubmitPassword = async (data) => {
+  const onSubmit = async (data) => {
     console.log(data)
 
     try {
@@ -99,7 +98,7 @@ const Profile = () => {
         const { errors } = error.response.data
 
         if (errors.global) {
-          setServerError(errors.global)
+          toast.error(errors.global)
         }
       }
     }
@@ -112,14 +111,14 @@ const Profile = () => {
           Account Settings
         </h2>
 
-        <form onSubmit={handleSubmit(onSubmitPassword)} className='space-y-6'>
+        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <div className='flex justify-center items-center mb-4 space-x-6'>
             <div className='flex justify-center'>
               <div className='relative'>
                 <img
                   src={image}
                   alt='Profile'
-                  className='w-24 h-24 rounded-full border-4 border-red-700'
+                  className='w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-red-700'
                 />
                 <input
                   type='file'
@@ -138,17 +137,14 @@ const Profile = () => {
                 Change Picture
               </label>
               <button
+                type='button'
                 onClick={deleteImage}
-                className='px-4 bg-transparent py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 text-center border border-wwred'
+                className='px-4 bg-transparent py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 text-center border border-wwred'
               >
                 Delete Picture
               </button>
             </div>
           </div>
-
-          {serverError && (
-            <p className='text-red-500 text-base mb-4'>{serverError}</p>
-          )}
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <div className='mb-4'>
@@ -156,13 +152,23 @@ const Profile = () => {
                 className='block text-sm font-medium mb-1 wwred'
                 htmlFor='fullName'
               >
-                Full Name*
+                Full Name<span className='text-red-500'>*</span>
               </label>
               <input
                 type='text'
                 id='fullName'
                 defaultValue='Stephen Max'
-                {...register('fullName', { required: 'Full Name is required' })}
+                {...register('fullName', {
+                  required: 'Full Name is required',
+                  minLength: {
+                    value: 3,
+                    message: 'Full name must be at least 3 characters',
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: 'Full name must be less than 50 characters',
+                  },
+                })}
                 className={`w-full px-3 py-2 border ${
                   errors.fullName ? 'border-red-500' : 'border-gray-600'
                 } bg-wwbg text-white focus:outline-none focus:border-red-500`}
@@ -179,13 +185,19 @@ const Profile = () => {
                 className='block text-sm font-medium mb-1 wwred'
                 htmlFor='email'
               >
-                Email Address*
+                Email Address<span className='text-red-500'>*</span>
               </label>
               <input
                 type='email'
                 id='email'
                 defaultValue='stephen@workoutwings.com'
-                {...register('email', { required: 'Email is required' })}
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Invalid email address',
+                  },
+                })}
                 placeholder='abc@example.com'
                 className={`w-full px-3 py-2 border ${
                   errors.email ? 'border-red-500' : 'border-gray-600'
@@ -209,7 +221,17 @@ const Profile = () => {
                 type='number'
                 id='age'
                 defaultValue='31'
-                {...register('age', { required: 'Age is required' })}
+                {...register('age', {
+                  required: 'Age is required',
+                  min: {
+                    value: 18,
+                    message: 'You must be at least 18 years old',
+                  },
+                  max: {
+                    value: 100,
+                    message: 'Age must be less than 120 years',
+                  },
+                })}
                 className={`w-full px-3 py-2 border ${
                   errors.age ? 'border-red-500' : 'border-gray-600'
                 } bg-wwbg text-white focus:outline-none focus:border-red-500`}
@@ -226,7 +248,7 @@ const Profile = () => {
                 className='block text-sm font-medium mb-1 wwred'
                 htmlFor='phoneNumber'
               >
-                Phone Number*
+                Phone Number<span className='text-red-500'>*</span>
               </label>
               <input
                 type='tel'
@@ -234,6 +256,18 @@ const Profile = () => {
                 defaultValue='+91 9012345678'
                 {...register('phoneNumber', {
                   required: 'Phone Number is required',
+                  min: {
+                    value: 1,
+                    message: 'Number must be at least 1',
+                  },
+                  max: {
+                    value: 100,
+                    message: 'Number must be at most 100',
+                  },
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: 'Enter a valid number',
+                  },
                 })}
                 className={`w-full px-3 py-2 border ${
                   errors.phoneNumber ? 'border-red-500' : 'border-gray-600'
@@ -245,39 +279,36 @@ const Profile = () => {
                 </p>
               )}
             </div>
-
-            <div className=''>
-              <a
-                type='button'
-                onClick={openModal}
-                className='text-wwred underline cursor-pointer'
-              >
-                Reset Password
-              </a>
-            </div>
           </div>
 
-          <div className='mt-6'>
-            <label className='block text-sm font-medium mb-3 wwred'>
-              What’s your preferred time?
-            </label>
+          <div className='text-right'>
+            <a
+              type='button'
+              onClick={openModal}
+              className='text-wwred underline cursor-pointer'
+            >
+              Reset Password
+            </a>
+          </div>
+          <label className='block text-sm font-medium mb-3 wwred'>
+            What’s your preferred time?
+          </label>
 
-            <div className='flex flex-wrap gap-2'>
-              {preferredTimings.map((timing) => (
-                <button
-                  key={timing}
-                  type='button'
-                  className={`px-4 py-2.5 w-1/2 md:w-0 mx-auto text-sm font-semibold shadow-sm border border-wwred flex-grow text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
-                    activeButton === timing
-                      ? 'bg-wwred text-white md:hover:bg-transparent md:hover:text-wwred'
-                      : 'bg-transparent text-red-500 md:hover:bg-wwred md:hover:text-white'
-                  } `}
-                  onClick={() => setActiveButton(timing)}
-                >
-                  {timing}
-                </button>
-              ))}
-            </div>
+          <div className='flex flex-wrap gap-2'>
+            {preferredTimings.map((timing) => (
+              <button
+                key={timing}
+                type='button'
+                className={`px-4 py-2.5 w-1/2 md:w-0 mx-auto text-sm font-semibold shadow-sm border border-wwred flex-grow text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
+                  activeButton === timing
+                    ? 'bg-wwred text-white md:hover:bg-red-600 md:hover:text-white'
+                    : 'bg-transparent text-red-500 md:hover:bg-red-600 md:hover:text-white'
+                } `}
+                onClick={() => setActiveButton(timing)}
+              >
+                {timing}
+              </button>
+            ))}
           </div>
 
           <div className='mt-6 text-center'>

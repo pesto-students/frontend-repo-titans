@@ -20,7 +20,6 @@ const Register = () => {
   } = useForm()
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
-  const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -73,7 +72,7 @@ const Register = () => {
         const { errors } = error.response.data
 
         if (errors.global) {
-          setServerError(errors.global)
+          toast.error(errors.global)
         }
       }
     }
@@ -117,9 +116,6 @@ const Register = () => {
           </p>
 
           <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-            {serverError && (
-              <p className='text-red-500 text-base mb-4'>{serverError}</p>
-            )}
             <div className='mb-4'>
               <label
                 className='block text-sm font-medium mb-1 wwred'
@@ -159,6 +155,24 @@ const Register = () => {
                     placeholder='**************'
                     {...register('password', {
                       required: 'Password is required',
+                      minLength: {
+                        value: 8,
+                        message: 'Password must be at least 8 characters long',
+                      },
+                      validate: {
+                        hasUppercase: (value) =>
+                          /[A-Z]/.test(value) ||
+                          'Password must include at least one uppercase letter',
+                        hasLowercase: (value) =>
+                          /[a-z]/.test(value) ||
+                          'Password must include at least one lowercase letter',
+                        hasNumber: (value) =>
+                          /[0-9]/.test(value) ||
+                          'Password must include at least one number',
+                        hasSpecialChar: (value) =>
+                          /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                          'Password must include at least one special character',
+                      },
                     })}
                     className={`w-full px-3 py-2 border ${
                       errors.password ? 'border-red-500' : 'border-gray-600'

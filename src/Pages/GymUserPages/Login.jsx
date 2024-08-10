@@ -19,7 +19,6 @@ const Login = () => {
     formState: { errors },
   } = useForm()
   const { isAuthenticated, refreshAuthState } = useAuth()
-  const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -71,11 +70,10 @@ const Login = () => {
       console.error('Error during login:', error)
 
       if (error.response && error.response.data.errors) {
-        const { errors: apiErrors } = error.response.data
+        const { errors } = error.response.data
 
-        // Set generic error message for the entire form
-        if (apiErrors.global) {
-          setServerError(apiErrors.global)
+        if (errors.global) {
+          toast.error(errors.global)
         }
       }
     }
@@ -110,9 +108,6 @@ const Login = () => {
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            {serverError && (
-              <p className='text-red-500 text-base mb-4'>{serverError}</p>
-            )}
             <div className='mb-4'>
               <label
                 className='block text-sm font-medium mb-1 wwred'

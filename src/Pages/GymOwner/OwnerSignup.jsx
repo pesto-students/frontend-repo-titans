@@ -18,7 +18,6 @@ const OwnerSignup = () => {
   } = useForm()
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
-  const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -68,7 +67,7 @@ const OwnerSignup = () => {
         const { errors } = error.response.data
 
         if (errors.global) {
-          setServerError(errors.global)
+          toast.error(errors.global)
         }
       }
     }
@@ -103,9 +102,6 @@ const OwnerSignup = () => {
         {/* Right side with registration form */}
         <div className='w-full md:w-1/2 lg:w-1/3 flex flex-col justify-center p-6 md:p-12'>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-            {serverError && (
-              <p className='text-red-500 text-base mb-4'>{serverError}</p>
-            )}
             <button className='w-full flex items-center justify-center bg-transparent py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full mb-2 text-center border border-wwred'>
               <FcGoogle className='w-6 h-6 mr-2' alt='Google Logo' />
               Continue with Google
@@ -155,6 +151,24 @@ const OwnerSignup = () => {
                   placeholder='**************'
                   {...register('password', {
                     required: 'Password is required',
+                    minLength: {
+                      value: 8,
+                      message: 'Password must be at least 8 characters long',
+                    },
+                    validate: {
+                      hasUppercase: (value) =>
+                        /[A-Z]/.test(value) ||
+                        'Password must include at least one uppercase letter',
+                      hasLowercase: (value) =>
+                        /[a-z]/.test(value) ||
+                        'Password must include at least one lowercase letter',
+                      hasNumber: (value) =>
+                        /[0-9]/.test(value) ||
+                        'Password must include at least one number',
+                      hasSpecialChar: (value) =>
+                        /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                        'Password must include at least one special character',
+                    },
                   })}
                   className={`w-full px-3 py-2 border ${
                     errors.password ? 'border-red-500' : 'border-gray-600'

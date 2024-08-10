@@ -17,7 +17,6 @@ const OwnerLogin = () => {
     formState: { errors },
   } = useForm()
   const { isAuthenticated, refreshAuthState } = useAuth()
-  const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -66,11 +65,10 @@ const OwnerLogin = () => {
       console.error('Error during login:', error)
 
       if (error.response && error.response.data.errors) {
-        const { errors: apiErrors } = error.response.data
+        const { errors } = error.response.data
 
-        // Set generic error message for the entire form
-        if (apiErrors.global) {
-          setServerError(apiErrors.global)
+        if (errors.global) {
+          toast.error(errors.global)
         }
       }
     }
@@ -82,9 +80,6 @@ const OwnerLogin = () => {
         {/* Left side with login form */}
         <div className='order-1 md:order-0 w-full md:w-1/2 lg:w-1/3 flex flex-col justify-center p-6 md:p-12'>
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-            {serverError && (
-              <p className='text-red-500 text-base mb-4'>{serverError}</p>
-            )}
             <button className='w-full flex items-center justify-center bg-transparent py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full mb-2 text-center border border-wwred'>
               <FcGoogle className='w-6 h-6 mr-2' alt='Google Logo' />
               Continue with Google
@@ -171,16 +166,34 @@ const OwnerLogin = () => {
           </p>
         </div>
 
+        {/* TODO: left in mobile center in desktop */}
         {/* Right side with welcome message */}
-        <div className='order-0 md:order-1 w-full md:w-1/2 flex flex-col justify-center text-center p-6 md:p-12'>
+        <div className='order-0 md:order-1 w-full md:w-1/2 flex flex-col justify-center items-center p-6 md:p-12'>
           <h2 className='text-2xl md:text-3xl font-semibold mb-4'>
             Welcome <span className='text-red-500'>Fitness Arena,</span>
           </h2>
           <ul className='space-y-2 text-sm md:text-lg'>
-            <li>• Manage your gym effortlessly</li>
-            <li>• Attract new users with WorkoutWings</li>
-            <li>• Log in now to start optimizing bookings</li>
-            <li>• Connect with fitness enthusiasts</li>
+            <li className='text-red-500'>
+              • <span className='text-white'>Manage your gym effortlessly</span>
+            </li>
+            <li className='text-red-500'>
+              •{' '}
+              <span className='text-white'>
+                Attract new users with WorkoutWings
+              </span>
+            </li>
+            <li className='text-red-500'>
+              •{' '}
+              <span className='text-white'>
+                Log in now to start optimizing bookings
+              </span>
+            </li>
+            <li className='text-red-500'>
+              •{' '}
+              <span className='text-white'>
+                Connect with fitness enthusiasts
+              </span>
+            </li>
           </ul>
         </div>
       </div>

@@ -17,16 +17,11 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
   } = useForm()
   const modalRef = useRef(null)
   const { isAuthenticated } = useAuth()
-  const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showExistingPassword, setShowExistingPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   const password = watch('password')
-
-  const notify = (message) => {
-    toast.error(message)
-  }
 
   // Outside Click will close the modal
   useEffect(() => {
@@ -65,11 +60,12 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
 
   const onSubmit = async (data) => {
     try {
-      console.log('isnide reset password modal')
+      console.log('Inside reset password modal')
 
       const response = await axios.post(
         `${config.BASE_BACKEND_URL}/user`,
         {
+          existingPassword: data.existingPassword,
           password: data.password,
         },
         {
@@ -86,7 +82,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
       if (response.status === 200) {
         // Redirect the user to the home page or dashboard
         // After successful login, refresh authentication state
-        notify('Your password has been reset')
+        toast.error('Your password has been reset')
         closeModal()
       }
     } catch (error) {
@@ -96,7 +92,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
         const { errors } = error.response.data
 
         if (errors.global) {
-          setServerError(errors.global)
+          toast.error(errors.global)
         }
       }
     }
@@ -117,9 +113,6 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
           onSubmit={handleSubmit(onSubmit)}
           className='border-t-2 border-t-red-700 space-y-6'
         >
-          {serverError && (
-            <p className='text-red-500 text-base mt-4'>{serverError}</p>
-          )}
           <div className='mt-2 mb-6'>
             <label
               className='block text-sm font-medium mb-1'
@@ -151,9 +144,9 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                 )}
               </button>
             </div>
-            {errors.password && (
+            {errors.existingPassword && (
               <p className='text-red-500 text-sm mt-1'>
-                {errors.password.message}
+                {errors.existingPassword.message}
               </p>
             )}
           </div>
@@ -170,7 +163,27 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                 type={showPassword ? 'text' : 'password'}
                 id='password'
                 placeholder='**************'
-                {...register('password', { required: 'Password is required' })}
+                {...register('password', {
+                  required: 'Password is required',
+                  minLength: {
+                    value: 8,
+                    message: 'Password must be at least 8 characters long',
+                  },
+                  validate: {
+                    hasUppercase: (value) =>
+                      /[A-Z]/.test(value) ||
+                      'Password must include at least one uppercase letter',
+                    hasLowercase: (value) =>
+                      /[a-z]/.test(value) ||
+                      'Password must include at least one lowercase letter',
+                    hasNumber: (value) =>
+                      /[0-9]/.test(value) ||
+                      'Password must include at least one number',
+                    hasSpecialChar: (value) =>
+                      /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                      'Password must include at least one special character',
+                  },
+                })}
                 className={`w-full px-3 py-2 border ${
                   errors.password ? 'border-red-500' : 'border-gray-600'
                 } bg-wwbg text-white focus:outline-none focus:border-red-500`}
