@@ -22,14 +22,11 @@ const OwnerSignup = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const notify = () =>
-    toast.error(
-      "You're currently logged in. To create a new account, please logout and try again."
-    )
-
   useEffect(() => {
     if (isAuthenticated) {
-      notify()
+      toast.error(
+        "You're currently logged in. To create a new account, please logout and try again."
+      )
 
       const interval = IntervalTimer(() => {
         navigate('/home')

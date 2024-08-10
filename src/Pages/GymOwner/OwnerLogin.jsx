@@ -23,14 +23,11 @@ const OwnerLogin = () => {
   const location = useLocation()
   const from = location.state?.from || '/home' // Get redirect location or provide fallback
 
-  const notify = () =>
-    toast.error(
-      "You're currently logged in. To use a different account, please logout and try again."
-    )
-
   useEffect(() => {
     if (isAuthenticated) {
-      notify()
+      toast.error(
+        "You're currently logged in. To use a different account, please logout and try again."
+      )
 
       const interval = IntervalTimer(() => {
         navigate('/home')
