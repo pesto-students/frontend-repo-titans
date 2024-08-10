@@ -50,6 +50,7 @@ const Login = () => {
         {
           email: data.email,
           password: data.password,
+          role: 'owner',
         },
         {
           headers: {

@@ -49,6 +49,7 @@ const OwnerSignup = () => {
         {
           email: data.email,
           password: data.password,
+          role: 'owner',
         },
         {
           headers: {
@@ -61,7 +62,7 @@ const OwnerSignup = () => {
       // Handle successful login
       if (response.status === 200) {
         // Redirect the user to the home page or dashboard
-        navigate('/login')
+        navigate('/owner/login')
       }
     } catch (error) {
       console.error('Error during registration:', error)
