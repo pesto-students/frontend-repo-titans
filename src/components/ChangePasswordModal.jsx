@@ -82,7 +82,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
       if (response.status === 200) {
         // Redirect the user to the home page or dashboard
         // After successful login, refresh authentication state
-        toast.error('Your password has been reset')
+        toast.success('Your password has been reset')
         closeModal()
       }
     } catch (error) {
