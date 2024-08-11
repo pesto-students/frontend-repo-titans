@@ -6,7 +6,7 @@ import GymCard from '../../components/GymCard';
 import config from '../../config';
 
 const SearchPage = () => {
-  const [gyms , setGyms] = useState([]);
+  const [gyms, setGyms] = useState([]);
   const [filteredGyms, setFilteredGyms] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
@@ -36,7 +36,7 @@ const SearchPage = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownRef]);
-  
+
   const searchGymsByName = (e) => {
     const name = e.target.value;
     if (name) {
@@ -46,7 +46,7 @@ const SearchPage = () => {
   };
 
   const fetchGymsInTheCity = async (city) => {
-    try{
+    try {
       const res = await axios.get(`${config.BASE_BACKEND_URL}/api/gym/search`, {
         params: { city: selectedCity } // Hardcoded city name for now
       });
@@ -66,18 +66,18 @@ const SearchPage = () => {
     }
   }
 
- const handleCityChange = (city) => {
+  const handleCityChange = (city) => {
     setSelectedCity(city);
     setDropdownOpen(false);
     // Add any additional logic for when a city is selected
   };
 
   return (
-    <div className="searchPage bg-black mx-auto px-4" style={{minHeight: "calc(100vh - 220px)"}}>
+    <div className="searchPage bg-black mx-auto px-4" style={{ minHeight: "calc(100vh - 220px)" }}>
       <div className="flex items-center justify-between space-x-2 p-3 bg-black">
         <div className="flex items-center justify-between space-x-2 p-3" style={{ flexBasis: '50%' }}>
           <div className="relative" ref={dropdownRef}>
-          <button  style={{minWidth:'15rem'}}
+            <button style={{ minWidth: '15rem' }}
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="bg-red-600 text-white py-2 px-4 flex justify-center items-center"
             >
@@ -102,7 +102,7 @@ const SearchPage = () => {
           <div className="relative w-full">
             <input type="text" id="gymName" name="gymName" placeholder="Search GYM"
               className="w-full px-3 py-2 pr-10 border bg-wwbg text-white focus:outline-none focus:border-red-500"
-              onChange={searchGymsByName}/>
+              onChange={searchGymsByName} />
             <FiSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white w-5 h-5" />
           </div>
         </div>

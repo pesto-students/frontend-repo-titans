@@ -25,8 +25,8 @@ const GymCard = ({ gymName, imageSrc, rating }) => {
                 </div>
             </div>
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 backdrop-blur p-4 flex justify-between items-center">
-              <span className="text-lg font-semibold">{gymName}</span>
-              <WWButton variant="v4" minWidth="6rem" text="View Details" className="rounded-full" />
+                <span className="text-lg font-semibold">{gymName}</span>
+                <WWButton variant="v4" minWidth="6rem" text="View Details" className="rounded-full" />
             </div>
         </div>
     );
