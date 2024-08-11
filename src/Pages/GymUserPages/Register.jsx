@@ -20,7 +20,6 @@ const Register = () => {
   } = useForm()
   const navigate = useNavigate()
   const { isAuthenticated } = useAuth()
-  const [serverError, setServerError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -51,6 +50,7 @@ const Register = () => {
         {
           email: data.email,
           password: data.password,
+          role: 'owner',
         },
         {
           headers: {
@@ -62,6 +62,7 @@ const Register = () => {
 
       // Handle successful login
       if (response.status === 200) {
+        toast.success(response.data.message)
         // Redirect the user to the home page or dashboard
         navigate('/login')
       }
@@ -72,7 +73,7 @@ const Register = () => {
         const { errors } = error.response.data
 
         if (errors.global) {
-          setServerError(errors.global)
+          toast.error(errors.global)
         }
       }
     }
@@ -116,9 +117,6 @@ const Register = () => {
           </p>
 
           <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-            {serverError && (
-              <p className='text-red-500 text-base mb-4'>{serverError}</p>
-            )}
             <div className='mb-4'>
               <label
                 className='block text-sm font-medium mb-1 wwred'
@@ -149,31 +147,55 @@ const Register = () => {
               >
                 Password
               </label>
-              <div className='relative'>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id='password'
-                  autoComplete='new-password'
-                  placeholder='**************'
-                  {...register('password', {
-                    required: 'Password is required',
-                  })}
-                  className={`w-full px-3 py-2 border ${
-                    errors.password ? 'border-red-500' : 'border-gray-600'
-                  } bg-wwbg text-white focus:outline-none focus:border-red-500`}
-                />
+              <div>
+                <div className='relative'>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id='password'
+                    autoComplete='new-password'
+                    placeholder='**************'
+                    {...register('password', {
+                      required: 'Password is required',
+                      minLength: {
+                        value: 8,
+                        message: 'Password must be at least 8 characters long',
+                      },
+                      validate: {
+                        hasUppercase: (value) =>
+                          /[A-Z]/.test(value) ||
+                          'Password must include at least one uppercase letter',
+                        hasLowercase: (value) =>
+                          /[a-z]/.test(value) ||
+                          'Password must include at least one lowercase letter',
+                        hasNumber: (value) =>
+                          /[0-9]/.test(value) ||
+                          'Password must include at least one number',
+                        hasSpecialChar: (value) =>
+                          /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                          'Password must include at least one special character',
+                      },
+                    })}
+                    className={`w-full px-3 py-2 border ${
+                      errors.password ? 'border-red-500' : 'border-gray-600'
+                    } bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword(!showPassword)}
+                    className='absolute inset-y-0 right-0 px-3 flex items-center text-gray-500'
+                  >
+                    {showPassword ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </button>
+                </div>
                 {errors.password && (
                   <p className='text-red-500 text-sm mt-1'>
                     {errors.password.message}
                   </p>
                 )}
-                <button
-                  type='button'
-                  onClick={() => setShowPassword(!showPassword)}
-                  className='absolute inset-y-0 right-0 px-3 flex items-center text-gray-500'
-                >
-                  {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-                </button>
               </div>
             </div>
 
@@ -184,40 +206,42 @@ const Register = () => {
               >
                 Confirm Password
               </label>
-              <div className='relative'>
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  id='confirm-password'
-                  placeholder='**************'
-                  {...register('confirmPassword', {
-                    required: 'Please confirm your password',
-                    validate: (value) =>
-                      value === password ||
-                      'Ensure both passwords are the same',
-                  })}
-                  className={`w-full px-3 py-2 border ${
-                    errors.confirmPassword
-                      ? 'border-red-500'
-                      : 'border-gray-600'
-                  } bg-wwbg text-white focus:outline-none focus:border-red-500`}
-                />
-                <button
-                  type='button'
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className='absolute inset-y-0 right-0 px-3 flex items-center text-gray-500'
-                >
-                  {showConfirmPassword ? (
-                    <AiOutlineEye />
-                  ) : (
-                    <AiOutlineEyeInvisible />
-                  )}
-                </button>
+              <div>
+                <div className='relative'>
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    id='confirm-password'
+                    placeholder='**************'
+                    {...register('confirmPassword', {
+                      required: 'Please confirm your password',
+                      validate: (value) =>
+                        value === password ||
+                        'Ensure both passwords are the same',
+                    })}
+                    className={`w-full px-3 py-2 border ${
+                      errors.confirmPassword
+                        ? 'border-red-500'
+                        : 'border-gray-600'
+                    } bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className='absolute inset-y-0 right-0 px-3 flex items-center text-gray-500'
+                  >
+                    {showConfirmPassword ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className='text-red-500 text-sm mt-1'>
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
-              {errors.confirmPassword && (
-                <p className='text-red-500 text-sm mt-1'>
-                  {errors.confirmPassword.message}
-                </p>
-              )}
             </div>
 
             <button

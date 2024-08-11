@@ -6,6 +6,7 @@ export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setAuthState] = useState(null)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     // Initialize authentication state
@@ -17,8 +18,17 @@ export const AuthProvider = ({ children }) => {
     setAuthState(getAuthToken())
   }
 
+  // TODO: merge token and userdata from cookie
+  const updateUserState = (userData) => {
+    setUser(userData)
+  }
+
+  console.log('AuthContext user data : ', user)
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, refreshAuthState }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, refreshAuthState, user, updateUserState }}
+    >
       {children}
     </AuthContext.Provider>
   )
