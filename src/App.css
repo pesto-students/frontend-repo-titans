@@ -244,4 +244,56 @@ body {
 .ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
   background-color: #ef4444 !important;
   color: #f1f5f9 !important;
+
+.Toastify__toast-icon svg {
+  color: #ef4444 !important;
+  fill: #ef4444 !important;
+}
+
+.custom-toast-success .Toastify__progress-bar {
+  background-color: #ef4444 !important;
+}
+
+.custom-toast-success .Toastify__progress-bar--success {
+  background-color: #ef4444 !important;
+}
+
+.Toastify__progress-bar--success {
+  background: #ef4444 !important;
+}
+
+.custom-toast-info .Toastify__progress-bar {
+  background-color: #ef4444 !important;
+}
+
+.custom-toast-info .Toastify__progress-bar--info {
+  background-color: #ef4444 !important;
+}
+
+.Toastify__progress-bar--info {
+  background: #ef4444 !important;
+}
+
+.custom-toast-warning .Toastify__progress-bar {
+  background-color: #ef4444 !important;
+}
+
+.custom-toast-warning .Toastify__progress-bar--warning {
+  background-color: #ef4444 !important;
+}
+
+.Toastify__progress-bar--warning {
+  background: #ef4444 !important;
+}
+
+.custom-toast-error .Toastify__progress-bar {
+  background-color: #ef4444 !important;
+}
+
+.custom-toast-error .Toastify__progress-bar--error {
+  background-color: #ef4444 !important;
+}
+
+.Toastify__progress-bar--error {
+  background: #ef4444 !important;
 }
