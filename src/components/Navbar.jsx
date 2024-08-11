@@ -15,7 +15,7 @@ const Navbar = () => {
   const userProfileImage = user?.profileImage || false
 
   return (
-    <header className='sticky border-b-2 header border-b-red-700'>
+    <header className='sticky border-b-2 header border-b-red-700 z-50'>
       <nav className='navbar'>
         <span id='logo'>
           <Link to='/' className='flex items-center logo'>
