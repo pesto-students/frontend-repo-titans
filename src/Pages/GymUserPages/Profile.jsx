@@ -253,7 +253,7 @@ const Profile = () => {
               <input
                 type='tel'
                 id='phoneNumber'
-                defaultValue='+91 9012345678'
+                defaultValue='9012345678'
                 {...register('phoneNumber', {
                   required: 'Phone Number is required',
                   min: {

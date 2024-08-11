@@ -244,6 +244,7 @@ body {
 .ant-picker-dropdown .ant-picker-time-panel-column>li.ant-picker-time-panel-cell-selected .ant-picker-time-panel-cell-inner {
   background-color: #ef4444 !important;
   color: #f1f5f9 !important;
+}
 
 .Toastify__toast-icon svg {
   color: #ef4444 !important;
