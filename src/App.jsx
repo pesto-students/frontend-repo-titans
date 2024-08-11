@@ -11,8 +11,8 @@ import Register from './Pages/GymUserPages/Register'
 import GymDetails from './Pages/GymUserPages/GymDetails'
 import PageNotFound from './Pages/Error/PageNotFound'
 import Profile from './Pages/GymUserPages/Profile'
-import OwnerSignup from './Pages/GymOwner/OwnerSignup'
-import OwnerLogin from './Pages/GymOwner/OwnerLogin'
+import OwnerSignup from './Pages/GymOwnerPages/OwnerSignup'
+import OwnerLogin from './Pages/GymOwnerPages/OwnerLogin'
 
 // Main application component
 function App() {
