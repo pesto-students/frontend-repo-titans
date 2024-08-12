@@ -29,7 +29,7 @@ function App() {
               <Route path='/bookings' element={<Bookings />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
-              <Route path='/gymDetails' element={<GymDetails />} />
+              <Route path='/gymDetails/:id' element={<GymDetails />} />
               <Route path='*' element={<PageNotFound />} />
               <Route
                 path='/user'

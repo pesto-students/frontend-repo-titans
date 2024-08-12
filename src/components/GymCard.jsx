@@ -2,7 +2,7 @@ import React from 'react';
 import WWButton from './WWButton';
 // import { FiStar } from 'react-icons/fi';
 
-const GymCard = ({ gymName, imageSrc, rating }) => {
+const GymCard = ({ gymName, imageSrc, rating, gymId }) => {
     return (
         <div className="relative bg-black text-white rounded-lg overflow-hidden shadow-lg">
             <img src={imageSrc} alt={gymName} className="w-full h-64 object-cover" />
@@ -26,7 +26,7 @@ const GymCard = ({ gymName, imageSrc, rating }) => {
             </div>
             <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-40 backdrop-blur p-4 flex justify-between items-center">
                 <span className="text-lg font-semibold">{gymName}</span>
-                <WWButton variant="v4" minWidth="6rem" text="View Details" className="rounded-full" />
+                <WWButton variant="v4" to={`/gymDetails/${gymId}`} minWidth="6rem" text="View Details" className="rounded-full" />
             </div>
         </div>
     );
