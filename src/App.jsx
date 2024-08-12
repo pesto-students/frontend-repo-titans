@@ -13,6 +13,7 @@ import PageNotFound from './Pages/Error/PageNotFound'
 import Profile from './Pages/GymUserPages/Profile'
 import OwnerSignup from './Pages/GymOwnerPages/OwnerSignup'
 import OwnerLogin from './Pages/GymOwnerPages/OwnerLogin'
+import GymForm from './Pages/GymOwnerPages/GymForm'
 
 // Main application component
 function App() {
@@ -38,6 +39,7 @@ function App() {
               {/* Owner's Routes */}
               <Route path='/owner/register' element={<OwnerSignup />} />
               <Route path='/owner/login' element={<OwnerLogin />} />
+              <Route path='/owner/gymForm' element={<GymForm />} />
             </Routes>
           </Layout>
         }
