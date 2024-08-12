@@ -13,15 +13,12 @@ const GymForm = () => {
   // Function to handle form submission and transition to next form
   const handleForm1Submit = (data) => {
     setFormData1(data) // Store form1 data
-    // console.log('Form 1 :', data)
     setCurrentForm('form2') // Transition to form2
   }
 
   // Function to handle form2 submission
   const handleForm2Submit = async (data) => {
     setFormData2(data) // Store form2 data
-    // console.log('Form 2 :', data)
-    console.log('Combined Form :', { ...formData1, ...formData2 })
 
     try {
       // Combine formData from form1 with form2 data
@@ -33,10 +30,8 @@ const GymForm = () => {
       //     },
       //   })
 
-      // Handle successful request (e.g., show a success message or redirect)
       toast.success('Your details saved successfully')
     } catch (error) {
-      console.error('Error while saving details:', error)
       toast.error('Failed to save details')
     }
   }
@@ -44,7 +39,6 @@ const GymForm = () => {
   // Function to handle navigation back to form1
   const handlePrevious = (data) => {
     setFormData2(data)
-    console.log('Form 2 :', data)
     setCurrentForm('form1') // Transition back to form1
   }
 

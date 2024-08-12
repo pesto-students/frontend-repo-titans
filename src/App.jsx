@@ -33,13 +33,13 @@ function App() {
               <Route path='/gymDetails' element={<GymDetails />} />
               <Route path='*' element={<PageNotFound />} />
               <Route
-                path='/user'
+                path='/users'
                 element={<PrivateRoute element={<Profile />} />}
               />
               {/* Owner's Routes */}
-              <Route path='/owner/register' element={<OwnerSignup />} />
-              <Route path='/owner/login' element={<OwnerLogin />} />
-              <Route path='/owner/gymForm' element={<GymForm />} />
+              <Route path='/owners/register' element={<OwnerSignup />} />
+              <Route path='/owners/login' element={<OwnerLogin />} />
+              <Route path='/owners/gymForm' element={<GymForm />} />
             </Routes>
           </Layout>
         }

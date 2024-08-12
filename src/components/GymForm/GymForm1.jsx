@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import PropTypes from 'prop-types'
-import image from '../../assets/images/ownergymform.png'
+import gymFormImage from '../../assets/images/ownergymform.png'
 import WelcomeModal from './WelcomeModal'
 
 const GAP_FROM_TOP = 150
@@ -44,7 +44,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
           {/* Image Section */}
           <div className='hidden md:block w-full md:w-1/2'>
             <img
-              src={image}
+              src={gymFormImage}
               alt='Gym Owner'
               className='w-full h-full object-cover'
             />
@@ -180,7 +180,13 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   type='text'
                   id='gstNumber'
                   placeholder='GST Number'
-                  {...register('gstNumber')}
+                  {...register('gstNumber', {
+                    required: false,
+                    pattern: {
+                      value: /^\d{15}$/,
+                      message: 'Invalid GST Number',
+                    },
+                  })}
                   className='w-full px-3 py-2 border border-gray-600 bg-wwbg text-white focus:outline-none focus:border-red-500'
                 />
               </div>

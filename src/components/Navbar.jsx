@@ -58,7 +58,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <li className='!py-1 flex items-center nav-item'>
-                <NavLink to='/user'>
+                <NavLink to='/users'>
                   <ProfileIcon
                     imageUrl={userProfileImage}
                     onClick={closeMenu}
@@ -126,7 +126,7 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <li className='nav-item'>
-                <NavLink to='/user'>
+                <NavLink to='/users'>
                   <ProfileIcon
                     imageUrl={userProfileImage}
                     onClick={closeMenu}

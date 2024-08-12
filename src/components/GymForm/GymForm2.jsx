@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { PiCurrencyInrLight } from 'react-icons/pi'
 import PropTypes from 'prop-types'
@@ -24,7 +24,6 @@ const FACILITIES = [
 ]
 
 const states = dataStates // data for states (address)
-
 const GymForm2 = ({ onSubmit, initialData, onPrevious }) => {
   const {
     handleSubmit,
@@ -60,7 +59,16 @@ const GymForm2 = ({ onSubmit, initialData, onPrevious }) => {
     }
   }, [errors, setFocus])
 
+  useEffect(() => {
+    const values = getValues()
+
+    if (values.googleMapsLink) {
+      setDisplayValue(values.googleMapsLink.replace(/^https:\/\//, ''))
+    }
+  }, [getValues])
+
   const fileInputRef = useRef(null)
+  const [displayValue, setDisplayValue] = useState('')
 
   // Watch fields
   const watchFacilities = watch('facilities', [])
@@ -301,15 +309,21 @@ const GymForm2 = ({ onSubmit, initialData, onPrevious }) => {
                   name='googleMapsLink'
                   control={control}
                   defaultValue=''
-                  rules={{
-                    pattern: {
-                      value: /^https:\/\/.*/,
-                      message: 'Google Maps Link must start with "https://"',
-                    },
-                  }}
                   render={({ field }) => (
                     <input
                       {...field}
+                      value={displayValue}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        setDisplayValue(val.replace(/^https:\/\//, ''))
+                        field.onChange(e)
+                      }}
+                      onBlur={() => {
+                        if (displayValue) {
+                          // Make sure the value in the form is updated to include `https://`
+                          setValue('googleMapsLink', `https://${displayValue}`)
+                        }
+                      }}
                       className={`w-full pl-16 px-3 py-2 border ${
                         errors.googleMapsLink
                           ? 'border-red-500'
@@ -345,6 +359,10 @@ const GymForm2 = ({ onSubmit, initialData, onPrevious }) => {
                   min: {
                     value: 1,
                     message: 'Number of customers must be at least 1',
+                  },
+                  max: {
+                    value: 100,
+                    message: 'Number of customers must be below 100',
                   },
                   pattern: {
                     value: /^[0-9]+$/,
@@ -542,7 +560,7 @@ const GymForm2 = ({ onSubmit, initialData, onPrevious }) => {
 
           {/* Agreement */}
           <div className='space-y-2'>
-            <div className='flex items-center space-x-4'>
+            <div className='flex items-center space-x-4 mt-12'>
               <Controller
                 name='agreement'
                 control={control}
@@ -620,7 +638,7 @@ GymForm2.propTypes = {
     state: PropTypes.string,
     pincode: PropTypes.string,
     googleMapsLink: PropTypes.string,
-    price: PropTypes.number,
+    price: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     images: PropTypes.arrayOf(PropTypes.instanceOf(File)),
     facilities: PropTypes.arrayOf(PropTypes.string),
     agreement: PropTypes.bool,
