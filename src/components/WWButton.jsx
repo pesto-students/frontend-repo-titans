@@ -8,6 +8,7 @@ function WWButton({
   to = '#',
   minWidth = '8rem',
   display = 'block',
+  onClick
 }) {
   const baseClass = 'px-3.5 py-2.5 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2';
   const commonClass = `text-white ${display}`;
@@ -24,6 +25,7 @@ function WWButton({
       <button
         className={`${baseClass} ${variants[variant]}`}
         style={{ minWidth }}
+        onClick={onClick}
       >
         {text}
       </button>
@@ -33,10 +35,11 @@ function WWButton({
 
 WWButton.propTypes = {
   text: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf(['v1', 'v2', 'v3']),
+  variant: PropTypes.oneOf(['v1', 'v2', 'v3', 'v4']),
   to: PropTypes.string,
   minWidth: PropTypes.string,
   display: PropTypes.string,
+  onClick: PropTypes.func
 };
 
 export default WWButton;
