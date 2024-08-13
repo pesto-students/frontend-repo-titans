@@ -13,8 +13,10 @@ export default {
         wwred : '#c13838',
         wwTitleRed:'#b91c1c',
         wwnavbar:'#1f1c1c '
-
-      }
+      },
+      screens: {
+        '2xl': '1536px', // To handle ultrawide displays
+      },
     },
   },
   plugins: [],
