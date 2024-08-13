@@ -18,8 +18,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { isAuthenticated, refreshAuthState } = useAuth()
-  const [serverError, setServerError] = useState('')
+  const { isAuthenticated, refreshAuthState, updateUserState } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -61,6 +60,16 @@ const Login = () => {
 
       // Handle successful login
       if (response.status === 200) {
+        toast.success(response.data.message)
+
+        updateUserState({
+          message: response.data.message,
+          profileImage:
+            'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61',
+        })
+
+        console.log('Logged In data : ', response.data)
+
         // Redirect the user to the home page or dashboard
         // After successful login, refresh authentication state
         refreshAuthState()
@@ -70,11 +79,10 @@ const Login = () => {
       console.error('Error during login:', error)
 
       if (error.response && error.response.data.errors) {
-        const { errors: apiErrors } = error.response.data
+        const { errors } = error.response.data
 
-        // Set generic error message for the entire form
-        if (apiErrors.global) {
-          setServerError(apiErrors.global)
+        if (errors.global) {
+          toast.error(errors.global)
         }
       }
     }
@@ -98,7 +106,7 @@ const Login = () => {
               <span className='mx-1 font-bold text-red-700'>,</span>
             </h2>
             <h2 className='text-2xl md:text-3xl font-semibold text-center md:text-left'>
-              Gym Geor
+              Gym Goer
             </h2>
           </div>
           <p className='text-sm text-gray-300 mb-8 text-center md:text-start'>
@@ -109,9 +117,6 @@ const Login = () => {
           </p>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            {serverError && (
-              <p className='text-red-500 text-base mb-4'>{serverError}</p>
-            )}
             <div className='mb-4'>
               <label
                 className='block text-sm font-medium mb-1 wwred'
@@ -142,31 +147,37 @@ const Login = () => {
               >
                 Password
               </label>
-              <div className='relative'>
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id='password'
-                  autoComplete='new-password'
-                  placeholder='**************'
-                  {...register('password', {
-                    required: 'Password is required',
-                  })}
-                  className={`w-full px-3 py-2 border ${
-                    errors.password ? 'border-red-500' : 'border-gray-600'
-                  } bg-wwbg text-white focus:outline-none focus:border-red-500`}
-                />
+              <div>
+                <div className='relative'>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id='password'
+                    autoComplete='new-password'
+                    placeholder='**************'
+                    {...register('password', {
+                      required: 'Password is required',
+                    })}
+                    className={`w-full px-3 py-2 border ${
+                      errors.password ? 'border-red-500' : 'border-gray-600'
+                    } bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                  />
+                  <button
+                    type='button'
+                    onClick={() => setShowPassword(!showPassword)}
+                    className='absolute inset-y-0 right-0 px-3 flex items-center text-gray-500'
+                  >
+                    {showPassword ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </button>
+                </div>
                 {errors.password && (
                   <p className='text-red-500 text-sm mt-1'>
                     {errors.password.message}
                   </p>
                 )}
-                <button
-                  type='button'
-                  onClick={() => setShowPassword(!showPassword)}
-                  className='absolute inset-y-0 right-0 px-3 flex items-center text-gray-500'
-                >
-                  {showPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-                </button>
               </div>
             </div>
 

@@ -221,7 +221,7 @@ const SearchPage = () => {
         ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default SearchPage;
+export default SearchPage

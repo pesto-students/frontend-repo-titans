@@ -5,16 +5,17 @@ import { GiLibertyWing } from 'react-icons/gi'
 import { deleteCookie } from '../utils/auth.jsx'
 import useAuth from '../hooks/useAuth'
 import './Navbar.css'
+import ProfileIcon from './ProfileIcon.jsx'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
-  const { isAuthenticated, refreshAuthState } = useAuth()
+  const { isAuthenticated, refreshAuthState, user } = useAuth()
+  const userProfileImage = user?.profileImage || false
 
   return (
-    <header className='sticky border-b-2 header border-b-red-700'>
+    <header className='sticky border-b-2 header border-b-red-700 z-50'>
       <nav className='navbar'>
         <span id='logo'>
           <Link to='/' className='flex items-center logo'>
@@ -55,37 +56,47 @@ const Navbar = () => {
             </NavLink>
           </li>
           {isAuthenticated ? (
-            <li className='nav-item'>
-              <Link
-                to='#'
-                className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 hover:bg-red-500 hover:text-white hover:border-transparent'
-                onClick={() => {
-                  deleteCookie()
-                  refreshAuthState()
-                }}
-              >
-                Logout
-              </Link>
-            </li>
+            <>
+              <li className='!py-1 flex items-center nav-item'>
+                <NavLink to='/users'>
+                  <ProfileIcon
+                    imageUrl={userProfileImage}
+                    onClick={closeMenu}
+                  />
+                </NavLink>
+              </li>
+              <li className='nav-item'>
+                <Link
+                  to='#'
+                  className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 hover:bg-red-500 hover:text-white hover:border-transparent'
+                  onClick={() => {
+                    deleteCookie()
+                    refreshAuthState()
+                  }}
+                >
+                  Logout
+                </Link>
+              </li>
+            </>
           ) : (
             <>
               <li className='nav-item'>
-                <Link
+                <NavLink
                   to='/login'
                   className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 hover:bg-red-500 hover:text-white hover:border-transparent'
                   onClick={closeMenu}
                 >
                   Login
-                </Link>
+                </NavLink>
               </li>
               <li className='nav-item'>
-                <Link
+                <NavLink
                   to='/register'
                   className='px-4 py-2 font-semibold bg-red-700 border border-red-300 shadow hover:bg-red-500 text-slate-100'
                   onClick={closeMenu}
                 >
                   Register
-                </Link>
+                </NavLink>
               </li>
             </>
           )}
@@ -113,37 +124,47 @@ const Navbar = () => {
             </NavLink>
           </li>
           {isAuthenticated ? (
-            <li className='nav-item'>
-              <Link
-                to='#'
-                className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 rounded hover:bg-red-500 hover:text-white hover:border-transparent'
-                onClick={() => {
-                  deleteCookie()
-                  refreshAuthState()
-                }}
-              >
-                Logout
-              </Link>
-            </li>
+            <>
+              <li className='nav-item'>
+                <NavLink to='/users'>
+                  <ProfileIcon
+                    imageUrl={userProfileImage}
+                    onClick={closeMenu}
+                  />
+                </NavLink>
+              </li>
+              <li className='nav-item'>
+                <NavLink
+                  to='#'
+                  className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 rounded hover:bg-red-500 hover:text-white hover:border-transparent'
+                  onClick={() => {
+                    deleteCookie()
+                    refreshAuthState()
+                  }}
+                >
+                  Logout
+                </NavLink>
+              </li>
+            </>
           ) : (
             <>
               <li className='nav-item'>
-                <Link
+                <NavLink
                   to='/login'
                   className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 rounded hover:bg-red-500 hover:text-white hover:border-transparent'
                   onClick={closeMenu}
                 >
                   Login
-                </Link>
+                </NavLink>
               </li>
               <li className='nav-item'>
-                <Link
+                <NavLink
                   to='/register'
                   className='px-4 py-2 font-semibold bg-red-700 border rounded shadow hover:bg-red-800 text-slate-100 border-slate-300'
                   onClick={closeMenu}
                 >
                   Register
-                </Link>
+                </NavLink>
               </li>
             </>
           )}

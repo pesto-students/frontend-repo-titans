@@ -11,8 +11,9 @@ import Register from './Pages/GymUserPages/Register'
 import GymDetails from './Pages/GymUserPages/GymDetails'
 import PageNotFound from './Pages/Error/PageNotFound'
 import Profile from './Pages/GymUserPages/Profile'
-import OwnerSignup from './Pages/GymOwner/OwnerSignup'
-import OwnerLogin from './Pages/GymOwner/OwnerLogin'
+import OwnerSignup from './Pages/GymOwnerPages/OwnerSignup'
+import OwnerLogin from './Pages/GymOwnerPages/OwnerLogin'
+import GymForm from './Pages/GymOwnerPages/GymForm'
 
 // Main application component
 function App() {
@@ -32,12 +33,13 @@ function App() {
               <Route path='/gymDetails/:id' element={<GymDetails />} />
               <Route path='*' element={<PageNotFound />} />
               <Route
-                path='/user'
+                path='/users'
                 element={<PrivateRoute element={<Profile />} />}
               />
               {/* Owner's Routes */}
-              <Route path='/owner/register' element={<OwnerSignup />} />
-              <Route path='/owner/login' element={<OwnerLogin />} />
+              <Route path='/owners/register' element={<OwnerSignup />} />
+              <Route path='/owners/login' element={<OwnerLogin />} />
+              <Route path='/owners/gymForm' element={<GymForm />} />
             </Routes>
           </Layout>
         }
