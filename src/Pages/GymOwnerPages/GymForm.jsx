@@ -3,12 +3,16 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import GymForm1 from '../../components/GymForm/GymForm1'
 import GymForm2 from '../../components/GymForm/GymForm2'
+import config from '../../config.js'
+import useAuth from '../../hooks/useAuth'
+
 
 const GymForm = () => {
   // State to track which form is currently displayed
   const [currentForm, setCurrentForm] = useState('form1')
   const [formData1, setFormData1] = useState({})
   const [formData2, setFormData2] = useState({})
+  const { isAuthenticated } = useAuth();
 
   // Function to handle form submission and transition to next form
   const handleForm1Submit = (data) => {
@@ -22,13 +26,27 @@ const GymForm = () => {
 
     try {
       // Combine formData from form1 with form2 data
-      const combinedData = { ...formData1, ...formData2 }
+      const combinedData = { ...formData1, ...data }
 
-      //   await axios.post('/your-upload-endpoint', combinedData, {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //     },
-      //   })
+      console.log("isAuthenticated for gym form : " + isAuthenticated);
+      console.log(combinedData);
+
+
+      const response = await axios.post(
+        `${config.BASE_BACKEND_URL}/gyms/onboarding`,
+        {
+          combinedData: combinedData
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${isAuthenticated}`,
+          },
+          withCredentials: true,
+        }
+      )
+
+      console.log("response : " + response);
+
 
       toast.success('Your details saved successfully')
     } catch (error) {
