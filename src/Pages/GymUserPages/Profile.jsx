@@ -281,7 +281,7 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className='text-right'>
+          <div className='hidden text-right'>
             <a
               type='button'
               onClick={openModal}

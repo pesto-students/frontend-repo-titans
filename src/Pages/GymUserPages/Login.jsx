@@ -183,10 +183,16 @@ const Login = () => {
 
             <button
               type='submit'
-              className='w-full bg-wwred py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+              className='w-full bg-wwred py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-6'
             >
               Sign In
             </button>
+
+            <p className='text-center'>
+              <Link to='/forgotpassword' className='text-red-500 underline'>
+                Forgot Password
+              </Link>
+            </p>
           </form>
 
           <div className='flex items-center my-6'>

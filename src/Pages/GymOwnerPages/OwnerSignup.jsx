@@ -41,7 +41,7 @@ const OwnerSignup = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/owner/register`,
+        `${config.BASE_BACKEND_URL}/api/auth/owners/register`,
         {
           email: data.email,
           password: data.password,
