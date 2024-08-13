@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import config from '../../config.js'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import api from '../../api/axios.js'
 
 const ResetPassword = () => {
   const {
@@ -38,12 +37,9 @@ const ResetPassword = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/resetpassword/${token}`,
-        {
-          password: data.password,
-        }
-      )
+      const response = await api.post(`/api/auth/resetpassword/${token}`, {
+        password: data.password,
+      })
 
       if (response.status === 200) {
         toast.success('Password reset successful')

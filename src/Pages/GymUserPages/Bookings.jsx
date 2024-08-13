@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import TableComponent from '../../components/TableComponent'
 import useAuth from '../../hooks/useAuth';
-import axios from 'axios';
-import config from '../../config.js';
+import api from '../../api/axios.js';
 
 function Bookings() {
   const [todayBookings, setTodayBookings] = useState([]);
@@ -15,15 +14,7 @@ function Bookings() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(
-          `${config.BASE_BACKEND_URL}/users/bookings`,
-          {
-            headers: {
-              Authorization: `Bearer ${isAuthenticated}`,
-            },
-            withCredentials: true,
-          }
-        );
+        const response = await api.get(`/users/bookings`);
   
         const bookings = response.data.bookings;
   

@@ -1,8 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import axios from 'axios'
 import { toast } from 'react-toastify'
-import config from '../../config.js'
+import api from '../../api/axios.js'
 
 const ForgotPassword = () => {
   const {
@@ -14,15 +13,11 @@ const ForgotPassword = () => {
 
   const onSubmit = async (data) => {
     try {
-      await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/forgetPassword`,
+      await api.post(`/api/auth/forgetPassword`,
         { email: data.email },
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
+          headers: { 'Content-Type': 'application/json' },
+        })
       toast.success('Password reset email sent.')
       reset()
     } catch (error) {

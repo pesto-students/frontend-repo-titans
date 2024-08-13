@@ -1,15 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react'
 import { PiCurrencyInrLight } from 'react-icons/pi'
-import { TimePicker } from 'antd'
 import dayjs from 'dayjs'
 import { DatePicker, Space, Select } from 'antd'
-import axios from 'axios'
-import config from '../config.js'
 import useAuth from '../hooks/useAuth.jsx'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { IntervalTimer } from '../utils/intervalTimer.js'
+import api from '../api/axios.js'
 
 const { Option } = Select
 
@@ -86,20 +84,13 @@ function BookNowSession({ price, gym_id, slots }) {
       console.log('Total Price:', calculateTotalPrice())
       console.log('Gym ID:', gym_id)
 
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/bookings`,
+      const response = await api.post( `/bookings`,
         {
           date,
           from: fromTime.format(format),
           to: toTime.format(format),
           totalPrice: calculateTotalPrice(),
           gym_id: gym_id || '66b8c95b6e2891a02c1f18f6',
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${isAuthenticated}`,
-          },
-          withCredentials: true,
         }
       )
 
