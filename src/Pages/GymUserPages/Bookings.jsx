@@ -3,12 +3,11 @@ import TableComponent from '../../components/TableComponent'
 import useAuth from '../../hooks/useAuth';
 import axios from 'axios';
 import config from '../../config.js';
-import BookingCard from '../../components/BookingCard.jsx';
 
 function Bookings() {
-
-  const [headers, setHeaders] = useState([]);
-  const [data, setData] = useState([]);
+  const [todayBookings, setTodayBookings] = useState([]);
+  const [pastBookings, setPastBookings] = useState([]);
+  const [futureBookings, setFutureBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { isAuthenticated } = useAuth();
@@ -24,15 +23,32 @@ function Bookings() {
             },
             withCredentials: true,
           }
-        )
-
+        );
+  
         const bookings = response.data.bookings;
-
+  
         if (bookings.length > 0) {
-          // Extract headers from keys of the first object
-          const extractedHeaders = Object.keys(bookings[0]);
-          setHeaders(extractedHeaders);
-          setData(bookings);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Set today's time to 00:00:00 for accurate comparison
+  
+          const todayBookings = bookings.filter(booking => {
+            const bookingDate = new Date(booking.date.split('/').reverse().join('-'));
+            return bookingDate.getTime() === today.getTime();
+          });
+  
+          const pastBookings = bookings.filter(booking => {
+            const bookingDate = new Date(booking.date.split('/').reverse().join('-'));
+            return bookingDate.getTime() < today.getTime();
+          });
+  
+          const futureBookings = bookings.filter(booking => {
+            const bookingDate = new Date(booking.date.split('/').reverse().join('-'));
+            return bookingDate.getTime() > today.getTime();
+          });
+  
+          setTodayBookings(todayBookings);
+          setPastBookings(pastBookings);
+          setFutureBookings(futureBookings);
         } else {
           setError('No bookings found.');
         }
@@ -42,33 +58,38 @@ function Bookings() {
         setLoading(false);
       }
     };
-
+  
     fetchBookings();
-  }, []);
-
-
+  }, [isAuthenticated]);
+  
+  const renderTable = (headers, data, title) => (
+    <div className="mb-8">
+      <h3 className="mb-4 text-lg font-bold">{title}</h3>
+      <TableComponent
+        columns={headers.length}
+        headers={headers}
+        data={data}
+      />
+    </div>
+  );
 
   return (
     <>
-
-      <BookingCard/>
-      <div>
-        <div className="p-6">
-          {loading ? (
-            <p>Loading...</p>
-          ) : error ? (
-            <p>{error}</p>
-          ) : (
-            <TableComponent
-              columns={headers.length}
-              headers={headers}
-              data={data}
-            />
-          )}
-        </div>
+      <div className="p-6">
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <>
+            {todayBookings.length > 0 && renderTable(Object.keys(todayBookings[0]), todayBookings, "Today's Bookings")}
+            {pastBookings.length > 0 && renderTable(Object.keys(pastBookings[0]), pastBookings, "Past Bookings")}
+            {futureBookings.length > 0 && renderTable(Object.keys(futureBookings[0]), futureBookings, "Future Bookings")}
+          </>
+        )}
       </div>
     </>
-  )
+  );
 }
 
-export default Bookings
+export default Bookings;

@@ -39,20 +39,20 @@ const GymForm1 = ({ onSubmit, initialData }) => {
   return (
     <>
       <WelcomeModal />
-      <div className='flex items-center justify-center bg-wwbg text-white min-h-screen p-4'>
-        <div className='flex flex-col md:flex-row bg-wwbg shadow-lg overflow-hidden w-full max-w-5xl'>
+      <div className='flex items-center justify-center min-h-screen p-4 text-white bg-wwbg'>
+        <div className='flex flex-col w-full max-w-5xl overflow-hidden shadow-lg md:flex-row bg-wwbg'>
           {/* Image Section */}
-          <div className='hidden md:block w-full md:w-1/2'>
+          <div className='hidden w-full md:block md:w-1/2'>
             <img
               src={gymFormImage}
               alt='Gym Owner'
-              className='w-full h-full object-cover'
+              className='object-cover w-full h-full'
             />
           </div>
 
           {/* Form Section */}
-          <div className='w-full md:w-1/2 p-8'>
-            <h2 className='text-3xl font-semibold text-wwred text-center md:text-start mb-8'>
+          <div className='w-full p-8 md:w-1/2'>
+            <h2 className='mb-8 text-3xl font-semibold text-center text-wwred md:text-start'>
               Gym Owner
             </h2>
 
@@ -60,7 +60,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
               {/* Full Name */}
               <div className='mb-4'>
                 <label
-                  className='block text-sm font-medium mb-1 wwred'
+                  className='block mb-1 text-sm font-medium wwred'
                   htmlFor='fullName'
                 >
                   Full Name <span className='text-red-500'>*</span>
@@ -85,7 +85,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                 />
                 {errors.fullName && (
-                  <p className='text-red-500 text-sm mt-1'>
+                  <p className='mt-1 text-sm text-red-500'>
                     {errors.fullName.message}
                   </p>
                 )}
@@ -94,7 +94,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
               {/* Contact Information */}
               <div className='mb-4'>
                 <label
-                  className='block text-sm font-medium mb-1 wwred'
+                  className='block mb-1 text-sm font-medium wwred'
                   htmlFor='contactInfo'
                 >
                   Contact Information <span className='text-red-500'>*</span>
@@ -115,20 +115,20 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                 />
                 {errors.contactInfo && (
-                  <p className='text-red-500 text-sm mt-1'>
+                  <p className='mt-1 text-sm text-red-500'>
                     {errors.contactInfo.message}
                   </p>
                 )}
               </div>
 
-              <h2 className='text-2xl font-semibold text-wwred text-center md:text-start mb-8'>
+              <h2 className='mb-8 text-2xl font-semibold text-center text-wwred md:text-start'>
                 Business Details
               </h2>
 
               {/* Gym Name */}
               <div className='mb-4'>
                 <label
-                  className='block text-sm font-medium mb-1 wwred'
+                  className='block mb-1 text-sm font-medium wwred'
                   htmlFor='gymName'
                 >
                   Gym Name <span className='text-red-500'>*</span>
@@ -145,7 +145,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                 />
                 {errors.gymName && (
-                  <p className='text-red-500 text-sm mt-1'>
+                  <p className='mt-1 text-sm text-red-500'>
                     {errors.gymName.message}
                   </p>
                 )}
@@ -154,7 +154,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
               {/* UPI ID */}
               <div className='mb-4'>
                 <label
-                  className='block text-sm font-medium mb-1 wwred'
+                  className='block mb-1 text-sm font-medium wwred'
                   htmlFor='upiId'
                 >
                   UPI ID
@@ -164,14 +164,14 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   id='upiId'
                   placeholder='UPI ID'
                   {...register('upiId')}
-                  className='w-full px-3 py-2 border border-gray-600 bg-wwbg text-white focus:outline-none focus:border-red-500'
+                  className='w-full px-3 py-2 text-white border border-gray-600 bg-wwbg focus:outline-none focus:border-red-500'
                 />
               </div>
 
               {/* GST Number */}
               <div className='mb-4'>
                 <label
-                  className='block text-sm font-medium mb-1 wwred'
+                  className='block mb-1 text-sm font-medium wwred'
                   htmlFor='gstNumber'
                 >
                   GST Number
@@ -180,14 +180,10 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   type='text'
                   id='gstNumber'
                   placeholder='GST Number'
-                  {...register('gstNumber', {
-                    required: false,
-                    pattern: {
-                      value: /^\d{15}$/,
-                      message: 'Invalid GST Number',
-                    },
-                  })}
-                  className='w-full px-3 py-2 border border-gray-600 bg-wwbg text-white focus:outline-none focus:border-red-500'
+                  {...register('gstNumber'
+  
+                  )}
+                  className='w-full px-3 py-2 text-white border border-gray-600 bg-wwbg focus:outline-none focus:border-red-500'
                 />
               </div>
 
