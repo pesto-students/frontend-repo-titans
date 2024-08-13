@@ -14,6 +14,8 @@ import Profile from './Pages/GymUserPages/Profile'
 import OwnerSignup from './Pages/GymOwnerPages/OwnerSignup'
 import OwnerLogin from './Pages/GymOwnerPages/OwnerLogin'
 import GymForm from './Pages/GymOwnerPages/GymForm'
+import ForgotPasswordForm from './Pages/ResetPassword/ForgotPassword'
+import ResetPassword from './Pages/ResetPassword/ResetPassword'
 
 // Main application component
 function App() {
@@ -24,6 +26,7 @@ function App() {
         element={
           <Layout>
             <Routes>
+              {/* User's Routes */}
               <Route path='/' element={<LandingPage />} />
               <Route path='/home' element={<Home />} />
               <Route path='/search' element={<SearchPage />} />
@@ -31,15 +34,19 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/gymDetails/:id' element={<GymDetails />} />
-              <Route path='*' element={<PageNotFound />} />
               <Route
                 path='/users'
                 element={<PrivateRoute element={<Profile />} />}
               />
+              {/* Reset/Forgot Password */}
+              <Route path='/forgotpassword' element={<ForgotPasswordForm />} />
+              <Route path='/resetpassword' element={<ResetPassword />} />
               {/* Owner's Routes */}
               <Route path='/owners/register' element={<OwnerSignup />} />
               <Route path='/owners/login' element={<OwnerLogin />} />
               <Route path='/owners/gymForm' element={<GymForm />} />
+              {/* Error Routes */}
+              <Route path='*' element={<PageNotFound />} />
             </Routes>
           </Layout>
         }

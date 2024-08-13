@@ -40,7 +40,7 @@ const OwnerLogin = () => {
     deleteCookie()
     try {
       const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/owner/login`,
+        `${config.BASE_BACKEND_URL}/api/auth/owners/login`,
         {
           email: data.email,
           password: data.password,
