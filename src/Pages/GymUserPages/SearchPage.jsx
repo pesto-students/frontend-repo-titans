@@ -27,6 +27,7 @@ const SearchPage = () => {
 
 
   useEffect(() => {
+    if(selectedCity)
     fetchGymsInTheCity();
   }, [selectedCity]);
 
@@ -139,8 +140,8 @@ const SearchPage = () => {
         return new Date(`1970-01-01T${Math.min(...times.map(time => new Date(`1970-01-01T${time}:00Z`).getTime()))}Z`);
       };
 
-      const nearestTimeA = getEarliestTime(a.availableTimeSlots);
-      const nearestTimeB = getEarliestTime(b.availableTimeSlots);
+      const nearestTimeA = getEarliestTime(a.slots);
+      const nearestTimeB = getEarliestTime(b.slots);
       return nearestTimeA - nearestTimeB;
     });
 
@@ -152,6 +153,14 @@ const SearchPage = () => {
   const sortByRating = () => setFilteredGyms([...filteredGyms].sort((a, b) => b.average_rating - a.average_rating));
   const sortByTime = () => sortByNearestTime(filteredGyms);
 
+
+  //set the height of the dropdown
+  const divRef = useRef(null);
+  useEffect(() => {
+    if (divRef.current) {
+      divRef.current.style.height = `${window.innerHeight-150}px`;
+    }
+  }, [dropdownOpen]);
 
   return (
     <div className="searchPage bg-black mx-auto px-4" style={{ minHeight: "calc(100vh - 220px)" }}>
@@ -167,7 +176,7 @@ const SearchPage = () => {
               <FiChevronDown className="w-5 h-5 ml-2" />
             </button>
             {dropdownOpen && (
-              <div className="absolute mt-2 w-full bg-red-600 shadow-lg z-10">
+              <div ref={divRef} className="absolute mt-2 w-full bg-red-600 shadow-lg z-10 overflow-auto">
                 {cities.map((city) => (
                   <div
                     key={city.id}
