@@ -1,9 +1,6 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-
-function GymDetails(props) {
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
 import { FaStar } from 'react-icons/fa'
 import Carousel from '../../components/Carousel'
 import BookNow from '../../components/BookNow'
@@ -14,6 +11,7 @@ import ContactGYM from '../../components/ContactGYM'
 import config from '../../config'
 
 function GymDetailsPage({gymid = "66b8c95b6e2891a02c1f18f6"}) {
+  const { id } = useParams(); // Here we have the GymID
   const [gymDetails, setGymDetails] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
