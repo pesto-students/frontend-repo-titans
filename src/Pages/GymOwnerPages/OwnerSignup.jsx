@@ -41,7 +41,7 @@ const OwnerSignup = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/register`,
+        `${config.BASE_BACKEND_URL}/api/auth/owner/register`,
         {
           email: data.email,
           password: data.password,
@@ -58,7 +58,7 @@ const OwnerSignup = () => {
       if (response.status === 200) {
         toast.success(response.data.message)
         // Redirect the user to the home page or dashboard
-        navigate('/owner/login')
+        navigate('/owners/login')
       }
     } catch (error) {
       console.error('Error during registration:', error)
@@ -242,7 +242,7 @@ const OwnerSignup = () => {
 
           <p className='text-sm text-center mt-4'>
             Already have an account?{' '}
-            <Link to='/owner/login' className='text-red-500'>
+            <Link to='/owners/login' className='text-red-500'>
               Sign In
             </Link>{' '}
             here

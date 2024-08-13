@@ -40,7 +40,7 @@ const OwnerLogin = () => {
     deleteCookie()
     try {
       const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/login`,
+        `${config.BASE_BACKEND_URL}/api/auth/owner/login`,
         {
           email: data.email,
           password: data.password,
@@ -167,7 +167,7 @@ const OwnerLogin = () => {
 
           <p className='text-sm text-center mt-4'>
             Don’t have an account?{' '}
-            <Link to='/owner/register' className='text-red-500'>
+            <Link to='/owners/register' className='text-red-500'>
               Sign Up
             </Link>{' '}
             here
