@@ -106,7 +106,7 @@ const Login = () => {
               <span className='mx-1 font-bold text-red-700'>,</span>
             </h2>
             <h2 className='text-2xl md:text-3xl font-semibold text-center md:text-left'>
-              Gym Geor
+              Gym Goer
             </h2>
           </div>
           <p className='text-sm text-gray-300 mb-8 text-center md:text-start'>
