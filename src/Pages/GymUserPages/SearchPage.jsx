@@ -4,6 +4,7 @@ import axios from 'axios';
 import WWButton from '../../components/WWButton';
 import GymCard from '../../components/GymCard';
 import config from '../../config';
+import api from '../../api/axios';
 
 const SearchPage = () => {
   const [gyms, setGyms] = useState([]);
@@ -61,7 +62,7 @@ const SearchPage = () => {
 
   const fetchGymsInTheCity = async (city) => {
     try {
-      const res = await axios.get(`${config.BASE_BACKEND_URL}/gyms/search`, {
+      const res = await api.get(`/gyms/search`, {
         params: { city: selectedCity.name }
       });
       setGyms(res.data);
@@ -73,7 +74,7 @@ const SearchPage = () => {
 
   const fetchCities = async () => {
     try {
-      const res = await axios.get(`${config.BASE_BACKEND_URL}/cities`);
+      const res = await api.get(`/cities`);
       setCities(res.data);
       setCitiesLoaded(true);
     } catch (error) {

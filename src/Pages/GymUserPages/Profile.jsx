@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import config from '../../config.js'
 import useAuth from '../../hooks/useAuth' // Custom hook for authentication
 import profile_img from '../../assets/svg/profile.svg'
 import ChangePasswordModal from '../../components/ChangePasswordModal.jsx'
 import { toast } from 'react-toastify'
+import api from '../../api/axios.js'
 
 const Profile = () => {
   const {
@@ -39,11 +38,11 @@ const Profile = () => {
 
     try {
       // Replace with your actual upload URL
-      const response = await axios.post('YOUR_UPLOAD_URL', formData, {
+      const response = await api.post('/YOUR_UPLOAD_URL', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      })
+      });
 
       // Handle successful upload response
       console.log('Image uploaded:', response.data)
@@ -69,19 +68,11 @@ const Profile = () => {
     console.log(data)
 
     try {
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/user`,
+      const response = await api.put(`/users`,
         {
           ...data, // Spread the form data
           preferredTiming: activeButton, // Add preferredTiming to request payload
-        },
-        {
-          headers: {
-            authorization: `Bearer ${isAuthenticated}`,
-          },
-          withCredentials: true,
-        }
-      )
+        })
 
       console.log(response)
 

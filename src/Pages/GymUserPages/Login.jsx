@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -7,10 +6,9 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
 import { IoCloseSharp } from 'react-icons/io5'
 import useAuth from '../../hooks/useAuth'
-import config from '../../config.js'
 import signin_img from '../../assets/images/signin.jpg'
-import { deleteCookie } from '../../utils/auth.jsx'
 import { IntervalTimer } from '../../utils/intervalTimer'
+import api from '../../api/axios.js'
 
 const Login = () => {
   const {
@@ -18,7 +16,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { isAuthenticated, refreshAuthState, updateUserState } = useAuth()
+  const { isAuthenticated, refreshAuthState, updateUserState, login } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -42,26 +40,21 @@ const Login = () => {
   })
 
   const onSubmit = async (data) => {
-    deleteCookie()
     try {
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/login`,
+      const response = await api.post(`/api/auth/login`,
         {
           email: data.email,
           password: data.password,
         },
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' }
         }
       )
 
       // Handle successful login
       if (response.status === 200) {
-        toast.success(response.data.message)
-
+        toast.success(response.data.message);
+        login(response.data.token);
         updateUserState({
           message: response.data.message,
           profileImage:

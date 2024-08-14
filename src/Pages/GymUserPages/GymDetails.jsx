@@ -9,6 +9,7 @@ import CurrentLocationMap from '../../components/CurrentLocationMap'
 import AboutSection from '../../components/AboutSection'
 import ContactGYM from '../../components/ContactGYM'
 import config from '../../config'
+import api from '../../api/axios'
 
 function GymDetailsPage({gymid = "66b8c95b6e2891a02c1f18f6"}) {
   const { id } = useParams(); // Here we have the GymID
@@ -20,7 +21,7 @@ function GymDetailsPage({gymid = "66b8c95b6e2891a02c1f18f6"}) {
     const fetchGymDetails = async () => {
       try {
         
-        const response = await axios.get(`${config.BASE_BACKEND_URL}/gyms/${gymid}`)
+        const response = await api.get(`/gyms/${gymid}`);
         setGymDetails(response.data)
       } catch (error) {
         setError('Error fetching gym details')

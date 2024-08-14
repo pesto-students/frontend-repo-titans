@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
 import useAuth from '../../hooks/useAuth.jsx'
-import config from '../../config.js'
-import { deleteCookie } from '../../utils/auth.jsx'
 import { IntervalTimer } from '../../utils/intervalTimer.js'
+import api from '../../api/axios.js'
 
 const OwnerLogin = () => {
   const {
@@ -37,21 +35,11 @@ const OwnerLogin = () => {
   })
 
   const onSubmit = async (data) => {
-    deleteCookie()
     try {
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/owners/login`,
-        {
-          email: data.email,
-          password: data.password,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
-        }
-      )
+      const response = await api.post('/api/auth/owners/login', {
+        email: data.email,
+        password: data.password,
+      });
 
       // Handle successful login
       if (response.status === 200) {

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { getAuthToken } from '../utils/auth' // Function to check JWT in cookies
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext()
 
@@ -23,11 +24,21 @@ export const AuthProvider = ({ children }) => {
     setUser(userData)
   }
 
-  console.log('AuthContext user data : ', user)
+  const login = (token) => {
+    localStorage.setItem('auth_token', token);
+    const decodedUser = jwtDecode(token);
+    console.log('Decoded User: ', decodedUser);
+    // setUser(decodedUser.payload);
+  };
+
+  const logout = () => {
+    localStorage.removeItem('auth_token');
+    setUser(null);
+  };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, refreshAuthState, user, updateUserState }}
+      value={{ isAuthenticated, refreshAuthState, user, updateUserState, login, logout }}
     >
       {children}
     </AuthContext.Provider>

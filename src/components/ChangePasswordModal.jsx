@@ -1,11 +1,10 @@
-import axios from 'axios'
 import React, { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import PropTypes from 'prop-types'
-import config from '../config.js'
 import useAuth from '../hooks/useAuth.jsx'
 import { toast } from 'react-toastify'
+import api from '../api/axios.js'
 
 const ChangePasswordModal = ({ isOpen, onClose }) => {
   const {
@@ -62,21 +61,14 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
     try {
       console.log('Inside reset password modal')
 
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/user`,
+      const response = await api.post( `/user`,
         {
           existingPassword: data.existingPassword,
           password: data.password,
-        },
-        {
-          headers: {
-            authorization: `Bearer ${isAuthenticated}`,
-          },
-          withCredentials: true,
         }
-      )
+      );
 
-      console.log(response)
+      // console.log(response)
 
       // Handle successful login
       if (response.status === 200) {

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { Link, NavLink } from 'react-router-dom'
 import { GiLibertyWing } from 'react-icons/gi'
-import { deleteCookie } from '../utils/auth.jsx'
 import useAuth from '../hooks/useAuth'
 import './Navbar.css'
 import ProfileIcon from './ProfileIcon.jsx'
@@ -11,7 +10,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
-  const { isAuthenticated, refreshAuthState, user } = useAuth()
+  const { isAuthenticated, refreshAuthState, user, logout } = useAuth()
   const userProfileImage = user?.profileImage || false
 
   return (
@@ -70,7 +69,7 @@ const Navbar = () => {
                   to='#'
                   className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 hover:bg-red-500 hover:text-white hover:border-transparent'
                   onClick={() => {
-                    deleteCookie()
+                    logout()
                     refreshAuthState()
                   }}
                 >
@@ -138,7 +137,7 @@ const Navbar = () => {
                   to='#'
                   className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 rounded hover:bg-red-500 hover:text-white hover:border-transparent'
                   onClick={() => {
-                    deleteCookie()
+                    logout()
                     refreshAuthState()
                   }}
                 >

@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
 import { IoCloseSharp } from 'react-icons/io5'
-import config from '../../config.js'
 import signup_img from '../../assets/images/signup.jpg'
 import useAuth from '../../hooks/useAuth'
 import { IntervalTimer } from '../../utils/intervalTimer'
+import api from '../../api/axios.js'
 
 const Register = () => {
   const {
@@ -45,17 +44,13 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/api/auth/register`,
+      const response = await api.post(`/api/auth/register`,
         {
           email: data.email,
           password: data.password,
         },
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true,
+          headers: { 'Content-Type': 'application/json' }
         }
       )
 
@@ -128,9 +123,8 @@ const Register = () => {
                 id='email'
                 placeholder='abc@example.com'
                 {...register('email', { required: 'Email is required' })}
-                className={`w-full px-3 py-2 border ${
-                  errors.email ? 'border-red-500' : 'border-gray-600'
-                }  bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                className={`w-full px-3 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-600'
+                  }  bg-wwbg text-white focus:outline-none focus:border-red-500`}
               />
               {errors.email && (
                 <p className='text-red-500 text-sm mt-1'>
@@ -174,9 +168,8 @@ const Register = () => {
                           'Password must include at least one special character',
                       },
                     })}
-                    className={`w-full px-3 py-2 border ${
-                      errors.password ? 'border-red-500' : 'border-gray-600'
-                    } bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                    className={`w-full px-3 py-2 border ${errors.password ? 'border-red-500' : 'border-gray-600'
+                      } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                   />
                   <button
                     type='button'
@@ -217,11 +210,10 @@ const Register = () => {
                         value === password ||
                         'Ensure both passwords are the same',
                     })}
-                    className={`w-full px-3 py-2 border ${
-                      errors.confirmPassword
+                    className={`w-full px-3 py-2 border ${errors.confirmPassword
                         ? 'border-red-500'
                         : 'border-gray-600'
-                    } bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                      } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                   />
                   <button
                     type='button'
@@ -267,4 +259,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Register;

@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { toast } from 'react-toastify'
 import GymForm1 from '../../components/GymForm/GymForm1'
 import GymForm2 from '../../components/GymForm/GymForm2'
-import config from '../../config.js'
 import useAuth from '../../hooks/useAuth'
+import api from '../../api/axios.js'
 
 
 const GymForm = () => {
@@ -32,22 +31,10 @@ const GymForm = () => {
       console.log(combinedData);
 
 
-      const response = await axios.post(
-        `${config.BASE_BACKEND_URL}/gyms/onboarding`,
-        {
-          combinedData: combinedData
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${isAuthenticated}`,
-          },
-          withCredentials: true,
-        }
-      )
+      const response = await api.post( `/gyms/onboarding`, { combinedData: combinedData });
 
-      console.log("response : " + response);
-
-
+      // console.log("response : " + response);
+      
       toast.success('Your details saved successfully')
     } catch (error) {
       toast.error('Failed to save details')
