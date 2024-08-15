@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -7,7 +7,6 @@ import { FcGoogle } from 'react-icons/fc'
 import { IoCloseSharp } from 'react-icons/io5'
 import useAuth from '../../hooks/useAuth'
 import signin_img from '../../assets/images/signin.jpg'
-import { IntervalTimer } from '../../utils/intervalTimer'
 import api from '../../api/axios.js'
 
 const Login = () => {
@@ -16,56 +15,31 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { isAuthenticated, refreshAuthState, updateUserState, login } = useAuth()
+  const { login } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from || '/home' // Get redirect location or provide fallback
 
-  const notify = () =>
-    toast.error(
-      "You're currently logged in. To use a different account, please logout and try again."
-    )
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      notify()
-
-      const interval = IntervalTimer(() => {
-        navigate('/home')
-      }, 1)
-
-      return () => clearInterval(interval)
-    }
-  })
-
   const onSubmit = async (data) => {
     try {
-      const response = await api.post(`/api/auth/login`,
+      const response = await api.post(
+        `/api/auth/login`,
         {
           email: data.email,
           password: data.password,
         },
         {
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       )
 
       // Handle successful login
       if (response.status === 200) {
-        toast.success(response.data.message);
-        login(response.data.token);
-        updateUserState({
-          message: response.data.message,
-          profileImage:
-            'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61',
-        })
+        toast.success(response.data.message)
+        login(response.data.token)
 
-        console.log('Logged In data : ', response.data)
-
-        // Redirect the user to the home page or dashboard
-        // After successful login, refresh authentication state
-        refreshAuthState()
+        // console.log('Logged In data : ', response.data)
         navigate(from, { replace: true })
       }
     } catch (error) {

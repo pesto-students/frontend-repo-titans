@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { FcGoogle } from 'react-icons/fc'
-import useAuth from '../../hooks/useAuth.jsx'
-import { IntervalTimer } from '../../utils/intervalTimer.js'
 import api from '../../api/axios.js'
 
 const OwnerLogin = () => {
@@ -14,47 +12,23 @@ const OwnerLogin = () => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const { isAuthenticated, refreshAuthState, updateUserState } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from || '/home' // Get redirect location or provide fallback
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      toast.error(
-        "You're currently logged in. To use a different account, please logout and try again."
-      )
-
-      const interval = IntervalTimer(() => {
-        navigate('/home')
-      }, 1)
-
-      return () => clearInterval(interval)
-    }
-  })
 
   const onSubmit = async (data) => {
     try {
       const response = await api.post('/api/auth/owners/login', {
         email: data.email,
         password: data.password,
-      });
+      })
 
       // Handle successful login
       if (response.status === 200) {
         toast.success(response.data.message)
 
-        updateUserState({
-          message: response.data.message,
-          profileImage:
-            'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61',
-        })
-
         console.log('Logged In data : ', response.data)
-        // Redirect the user to the home page or dashboard
-        // After successful login, refresh authentication state
-        refreshAuthState()
         navigate(from, { replace: true })
       }
     } catch (error) {

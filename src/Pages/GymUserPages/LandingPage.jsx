@@ -1,32 +1,10 @@
-import React, { useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import landingPageimage from '../../assets/landingPageImage.png'
 import profilePic from '../../assets/profileP.jpg'
-import useAuth from '../../hooks/useAuth'
-import { IntervalTimer } from '../../utils/intervalTimer'
 // there is className called width-change in this File. we need to increase its width to make the page more appealing
 
 function LandingPage() {
-  const { isAuthenticated } = useAuth()
-  const navigate = useNavigate()
-  const notify = () =>
-    toast.error(
-      "You're currently logged in. To use a different account, please logout and try again."
-    )
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      notify()
-
-      const interval = IntervalTimer(() => {
-        navigate('/home')
-      }, 1)
-
-      return () => clearInterval(interval)
-    }
-  })
-
   return (
     <div className='pb-10 bg-grey-900'>
       {/* section 1 */}

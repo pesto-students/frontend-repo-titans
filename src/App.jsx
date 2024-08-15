@@ -1,6 +1,7 @@
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
-import PrivateRoute from './components/PrivateRoute'
+import PrivateRoute from './components/routes/PrivateRoute'
+import PublicRoute from './components/routes/PublicRoute'
 import Layout from './components/Layout'
 import LandingPage from './Pages/GymUserPages/LandingPage'
 import Home from './Pages/GymUserPages/Home'
@@ -27,12 +28,21 @@ function App() {
           <Layout>
             <Routes>
               {/* User's Routes */}
-              <Route path='/' element={<LandingPage />} />
+              <Route
+                path='/'
+                element={<PublicRoute element={<LandingPage />} />}
+              />
               <Route path='/home' element={<Home />} />
               <Route path='/search' element={<SearchPage />} />
               <Route path='/bookings' element={<Bookings />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register />} />
+              <Route
+                path='/login'
+                element={<PublicRoute element={<Login />} />}
+              />
+              <Route
+                path='/register'
+                element={<PublicRoute element={<Register />} />}
+              />
               <Route path='/gymDetails/:id' element={<GymDetails />} />
               <Route
                 path='/users'
@@ -42,8 +52,14 @@ function App() {
               <Route path='/forgotpassword' element={<ForgotPasswordForm />} />
               <Route path='/resetpassword' element={<ResetPassword />} />
               {/* Owner's Routes */}
-              <Route path='/owners/register' element={<OwnerSignup />} />
-              <Route path='/owners/login' element={<OwnerLogin />} />
+              <Route
+                path='/owners/register'
+                element={<PublicRoute element={<OwnerSignup />} />}
+              />
+              <Route
+                path='/owners/login'
+                element={<PublicRoute element={<OwnerLogin />} />}
+              />
               <Route path='/owners/gymForm' element={<GymForm />} />
               {/* Error Routes */}
               <Route path='*' element={<PageNotFound />} />
