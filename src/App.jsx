@@ -32,9 +32,9 @@ function App() {
                 path='/'
                 element={<PublicRoute element={<LandingPage />} />}
               />
-              <Route path='/home' element={<Home />} />
+              <Route path='/home' element={<PrivateRoute element={<Home />} />}/>
               <Route path='/search' element={<SearchPage />} />
-              <Route path='/bookings' element={<Bookings />} />
+              <Route path='/bookings' element={<PrivateRoute element={<Bookings />} />}/>
               <Route
                 path='/login'
                 element={<PublicRoute element={<Login />} />}
