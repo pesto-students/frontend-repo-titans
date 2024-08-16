@@ -25,16 +25,38 @@ const GymForm = () => {
 
     try {
       // Combine formData from form1 with form2 data
-      const combinedData = { ...formData1, ...data }
+      // Create a new FormData instance
+      const formData = new FormData();
+      // Append data from formData1 to FormData
+      for (const [key, value] of Object.entries(formData1)) {
+        formData.append(key, value);
+      }
 
-      console.log("isAuthenticated for gym form : " + isAuthenticated);
-      console.log(combinedData);
+      // Append data from form2 to FormData
+      for (const [key, value] of Object.entries(data)) {
+        formData.append(key, value);
+      }
 
 
-      const response = await api.post( `/gyms/onboarding`, { combinedData: combinedData });
+      // Iterate over FormData entries and log them
+      for (const [key, value] of formData.entries()) {
+        if (key === 'images') {
+          // Handle and log image file details separately
+          console.log('Images:');
+          for (const file of value) {
+            console.log(`File name: ${file.name}, File size: ${file.size}`);
+          }
+        } else {
+          // Log other form data entries
+          console.log(`${key}: ${value}`);
+        }
+      }
 
-      // console.log("response : " + response);
-      
+
+      const response = (await api.post(`/gyms`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }));
+
+      console.log("response : " + response.data);
+
       toast.success('Your details saved successfully')
     } catch (error) {
       toast.error('Failed to save details')
