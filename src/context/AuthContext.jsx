@@ -1,44 +1,50 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { getAuthToken } from '../utils/auth' // Function to check JWT in cookies
-import PropTypes from 'prop-types';
-import { jwtDecode } from 'jwt-decode';
+import PropTypes from 'prop-types'
+import { jwtDecode } from 'jwt-decode'
 
 export const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setAuthState] = useState(null)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [user, setUser] = useState(null)
+
+  // console.log('AuthState:', isAuthenticated)
 
   useEffect(() => {
     // Initialize authentication state
-    setAuthState(getAuthToken())
-  }, [])
+    const token = getAuthToken()
+    if (token) {
+      const decodedUser = jwtDecode(token)
+      // console.log('Decoded User: ', decodedUser.payload)
+      setUser(decodedUser.payload)
+    }
 
-  // Method to manually update authentication state
-  const refreshAuthState = () => {
-    setAuthState(getAuthToken())
-  }
-
-  // TODO: merge token and userdata from cookie
-  const updateUserState = (userData) => {
-    setUser(userData)
-  }
+    setIsAuthenticated(token)
+  }, [isAuthenticated])
 
   const login = (token) => {
-    localStorage.setItem('auth_token', token);
-    const decodedUser = jwtDecode(token);
-    console.log('Decoded User: ', decodedUser);
-    // setUser(decodedUser.payload);
-  };
+    localStorage.setItem('auth_token', token)
+    setIsAuthenticated(token)
+    const decodedUser = jwtDecode(token)
+    // console.log('Decoded User: ', decodedUser.payload)
+    setUser(decodedUser.payload)
+  }
 
   const logout = () => {
-    localStorage.removeItem('auth_token');
-    setUser(null);
-  };
+    localStorage.removeItem('auth_token')
+    setUser(null)
+    setIsAuthenticated(false)
+  }
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, refreshAuthState, user, updateUserState, login, logout }}
+      value={{
+        isAuthenticated,
+        user,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

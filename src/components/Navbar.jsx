@@ -10,8 +10,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
   const closeMenu = () => setIsMenuOpen(false)
-  const { isAuthenticated, refreshAuthState, user, logout } = useAuth()
-  const userProfileImage = user?.profileImage || false
+  const { isAuthenticated, user, logout } = useAuth()
+  const userProfileImage = user?.profile_image || false
 
   return (
     <header className='sticky border-b-2 header border-b-red-700 z-50'>
@@ -70,7 +70,6 @@ const Navbar = () => {
                   className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 hover:bg-red-500 hover:text-white hover:border-transparent'
                   onClick={() => {
                     logout()
-                    refreshAuthState()
                   }}
                 >
                   Logout
@@ -138,7 +137,6 @@ const Navbar = () => {
                   className='px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 rounded hover:bg-red-500 hover:text-white hover:border-transparent'
                   onClick={() => {
                     logout()
-                    refreshAuthState()
                   }}
                 >
                   Logout
