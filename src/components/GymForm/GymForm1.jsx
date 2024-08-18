@@ -100,7 +100,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   Contact Information <span className='text-red-500'>*</span>
                 </label>
                 <input
-                  type='text'
+                  type='number'
                   id='contactInfo'
                   placeholder='9876543210'
                   {...register('contactInfo', {
@@ -180,9 +180,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   type='text'
                   id='gstNumber'
                   placeholder='GST Number'
-                  {...register('gstNumber'
-  
-                  )}
+                  {...register('gstNumber')}
                   className='w-full px-3 py-2 text-white border border-gray-600 bg-wwbg focus:outline-none focus:border-red-500'
                 />
               </div>
