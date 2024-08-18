@@ -1,7 +1,7 @@
 import React from 'react'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import config from '../config.js'
-import customPin from '../assets/GmapPin.png' // Import the image
+import config from '../../config.js'
+import customPin from '../../assets/GmapPin.png' // Import the image
 
 const mapContainerStyle = {
   height: '100%',
