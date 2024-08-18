@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import useAuth from '../../hooks/useAuth' // Custom hook for authentication
 import profile_img from '../../assets/svg/profile.svg'
@@ -8,78 +8,140 @@ import api from '../../api/axios.js'
 
 const Profile = () => {
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors },
+    reset,
+    setFocus,
+    setValue,
   } = useForm()
-  const { isAuthenticated, user } = useAuth()
+  const { user, setUser } = useAuth()
   const [image, setImage] = useState(profile_img)
-  const [selectedFile, setSelectedFile] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [activeButton, setActiveButton] = useState('Early Morning')
+  const [activeButton, setActiveButton] = useState('')
+
+  // Preload all profile data from backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user) {
+          const response = await api.get(`/users`, {
+            headers: { 'Content-Type': 'application/json' },
+          })
+
+          // set the image for progile pic or default image
+          setImage(user?.profile_image || profile_img)
+
+          if (response.status === 200) {
+            console.log('Logged In data : ', response.data.user)
+            const userdata = response.data.user
+
+            reset({
+              full_name: userdata?.full_name,
+              age: userdata.age,
+              email: userdata.email,
+              phone_number: userdata.phone_number,
+              preferred_time: userdata.preferred_time,
+            })
+
+            // setImage(userdata?.profile_image || profile_img)
+            setActiveButton(userdata.preferred_time)
+          }
+        }
+      } catch (error) {
+        console.error('Error during loading profile:', error)
+
+        if (error.response && error.response.data.errors) {
+          const { errors } = error.response.data
+
+          if (errors.global) {
+            toast.error(errors.global)
+          }
+        }
+      }
+    }
+
+    fetchData()
+  }, [user, reset])
+
+  // Focus the input field on error
+  useEffect(() => {
+    const firstErrorField = Object.keys(errors)[0]
+    if (firstErrorField) {
+      setFocus(firstErrorField)
+      setTimeout(() => {
+        const element = document.getElementById(firstErrorField)
+        if (element) {
+          // Calculate the desired scroll position
+          const elementPosition =
+            element.getBoundingClientRect().top + window.scrollY
+          window.scrollTo({
+            behavior: 'smooth',
+            top: elementPosition - 150,
+          })
+        }
+      }, 100)
+    }
+  }, [errors, setFocus])
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]
     if (file) {
-      setSelectedFile(file)
-
-      // Create a URL for previewing the image
+      // Update file input value manually to be handled in `onSubmit`
+      setValue('profile_image', file)
       const imageUrl = URL.createObjectURL(file)
       setImage(imageUrl)
-
-      // Optionally, upload the file to the server
-      // uploadImage(file)
-    }
-  }
-
-  const uploadImage = async (file) => {
-    const formData = new FormData()
-    formData.append('file', file)
-
-    try {
-      // Replace with your actual upload URL
-      const response = await api.post('/YOUR_UPLOAD_URL', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-
-      // Handle successful upload response
-      console.log('Image uploaded:', response.data)
-    } catch (error) {
-      console.error('Error uploading image:', error)
     }
   }
 
   const deleteImage = () => {
     setImage(profile_img) // Reset to default image
-    setSelectedFile(null) // Clear selected file
+    setValue('profile_image', null) // Clear selected file
   }
 
   // RestPassword Modal
   const openModal = () => setIsModalOpen(true)
   const closeModal = () => setIsModalOpen(false)
 
-  const preferredTimings = ['Early Morning', 'Morning', 'Afternoon', 'Evening']
-
-  console.log('Authorization: ', isAuthenticated)
+  const preferredTimings = ['morning', 'afternoon', 'evening', 'night']
 
   const onSubmit = async (data) => {
     console.log(data)
 
     try {
-      const response = await api.put(`/users`,
+      const response = await api.patch(
+        `/users`,
         {
           ...data, // Spread the form data
-          preferredTiming: activeButton, // Add preferredTiming to request payload
-        })
-
-      console.log(response)
+          preferred_time: activeButton, // Add preferredTiming to request payload
+        },
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      )
 
       // Handle successful login
       if (response.status === 200) {
-        // Redirect the user to the home page or dashboard
-        // After successful login, refresh authentication state
+        console.log('After user data saved : ', response.data.user)
+        const userdata = response.data.user
+
+        reset({
+          full_name: userdata?.full_name,
+          age: userdata.age,
+          email: userdata.email,
+          phone_number: userdata.phone_number,
+          preferred_time: userdata.preferred_time,
+        })
+
+        // set the user
+        setUser((prevUser) => ({
+          ...prevUser,
+          profile_image: userdata.profile_image,
+        }))
+        // setImage(userdata?.profile_image || profile_img)
+        setActiveButton(userdata.preferred_time)
+
         toast.success('Your details saved successfully')
       }
     } catch (error) {
@@ -88,8 +150,8 @@ const Profile = () => {
       if (error.response && error.response.data.errors) {
         const { errors } = error.response.data
 
-        if (errors.global) {
-          toast.error(errors.global)
+        if (errors) {
+          toast.error(errors)
         }
       }
     }
@@ -107,7 +169,7 @@ const Profile = () => {
             <div className='flex justify-center'>
               <div className='relative'>
                 <img
-                  src={user?.profileImage || image}
+                  src={image}
                   alt='Profile'
                   className='w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-red-700'
                 />
@@ -141,15 +203,14 @@ const Profile = () => {
             <div className='mb-4'>
               <label
                 className='block text-sm font-medium mb-1 wwred'
-                htmlFor='fullName'
+                htmlFor='full_name'
               >
                 Full Name<span className='text-red-500'>*</span>
               </label>
               <input
                 type='text'
-                id='fullName'
-                defaultValue='Stephen Max'
-                {...register('fullName', {
+                id='full_name'
+                {...register('full_name', {
                   required: 'Full Name is required',
                   minLength: {
                     value: 3,
@@ -161,12 +222,12 @@ const Profile = () => {
                   },
                 })}
                 className={`w-full px-3 py-2 border ${
-                  errors.fullName ? 'border-red-500' : 'border-gray-600'
+                  errors.full_name ? 'border-red-500' : 'border-gray-600'
                 } bg-wwbg text-white focus:outline-none focus:border-red-500`}
               />
-              {errors.fullName && (
+              {errors.full_name && (
                 <p className='text-red-500 text-sm mt-1'>
-                  {errors.fullName.message}
+                  {errors.full_name.message}
                 </p>
               )}
             </div>
@@ -181,7 +242,6 @@ const Profile = () => {
               <input
                 type='email'
                 id='email'
-                defaultValue='stephen@workoutwings.com'
                 {...register('email', {
                   required: 'Email is required',
                   pattern: {
@@ -211,9 +271,7 @@ const Profile = () => {
               <input
                 type='number'
                 id='age'
-                defaultValue='31'
                 {...register('age', {
-                  required: 'Age is required',
                   min: {
                     value: 18,
                     message: 'You must be at least 18 years old',
@@ -237,15 +295,14 @@ const Profile = () => {
             <div className='mb-4'>
               <label
                 className='block text-sm font-medium mb-1 wwred'
-                htmlFor='phoneNumber'
+                htmlFor='phone_number'
               >
                 Phone Number<span className='text-red-500'>*</span>
               </label>
               <input
                 type='tel'
-                id='phoneNumber'
-                defaultValue='9012345678'
-                {...register('phoneNumber', {
+                id='phone_number'
+                {...register('phone_number', {
                   required: 'Phone Number is required',
                   min: {
                     value: 1,
@@ -261,12 +318,12 @@ const Profile = () => {
                   },
                 })}
                 className={`w-full px-3 py-2 border ${
-                  errors.phoneNumber ? 'border-red-500' : 'border-gray-600'
+                  errors.phone_number ? 'border-red-500' : 'border-gray-600'
                 } bg-wwbg text-white focus:outline-none focus:border-red-500`}
               />
-              {errors.phoneNumber && (
+              {errors.phone_number && (
                 <p className='text-red-500 text-sm mt-1'>
-                  {errors.phoneNumber.message}
+                  {errors.phone_number.message}
                 </p>
               )}
             </div>
@@ -290,7 +347,7 @@ const Profile = () => {
               <button
                 key={timing}
                 type='button'
-                className={`px-4 py-2.5 w-1/2 md:w-0 mx-auto text-sm font-semibold shadow-sm border border-wwred flex-grow text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${
+                className={`px-4 py-2.5 w-1/2 md:w-0 mx-auto text-sm font-semibold shadow-sm border border-wwred flex-grow text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 capitalize ${
                   activeButton === timing
                     ? 'bg-wwred text-white md:hover:bg-red-600 md:hover:text-white'
                     : 'bg-transparent text-red-500 md:hover:bg-red-600 md:hover:text-white'
