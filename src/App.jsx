@@ -17,6 +17,7 @@ import OwnerLogin from './Pages/GymOwnerPages/OwnerLogin'
 import GymForm from './Pages/GymOwnerPages/GymForm'
 import ForgotPasswordForm from './Pages/ResetPassword/ForgotPassword'
 import ResetPassword from './Pages/ResetPassword/ResetPassword'
+import SlotPage from './Pages/GymOwnerPages/SlotPage'
 
 // Main application component
 function App() {
@@ -32,9 +33,9 @@ function App() {
                 path='/'
                 element={<PublicRoute element={<LandingPage />} />}
               />
-              <Route path='/home' element={<PrivateRoute element={<Home />} />}/>
+              <Route path='/home' element={<PrivateRoute element={<Home />} />} />
               <Route path='/search' element={<SearchPage />} />
-              <Route path='/bookings' element={<PrivateRoute element={<Bookings />} />}/>
+              <Route path='/bookings' element={<PrivateRoute element={<Bookings />} />} />
               <Route
                 path='/login'
                 element={<PublicRoute element={<Login />} />}
@@ -61,8 +62,12 @@ function App() {
                 element={<PublicRoute element={<OwnerLogin />} />}
               />
               <Route path='/owners/gymForm' element={<GymForm />} />
-              {/* Error Routes */}
+              <Route path='/slot' element={<SlotPage />} />
+                
+                {/* Error Routes */}
+              
               <Route path='*' element={<PageNotFound />} />
+            
             </Routes>
           </Layout>
         }
