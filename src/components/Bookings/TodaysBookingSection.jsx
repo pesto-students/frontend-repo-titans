@@ -62,7 +62,7 @@ function TodaysBookingSection({ todayBookings = [] }) {
   }
   // Cancel request goes here
   const handleCancel = async () => {
-    const response = await api.patch('/bookings', {
+    const response = await api.patch('/bookings/cancel', {
       "bookingId": booking._id
     })
 
