@@ -109,7 +109,7 @@ const SearchPage = () => {
 
   const fetchCities = async () => {
     try {
-      const res = await api.get(`/cities`);
+      const res = await api.get(`/gyms/cities`);
 
       setCities(res.data);
       setCitiesLoaded(true);
