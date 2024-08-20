@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
 import { FiMapPin, FiSearch, FiChevronDown } from "react-icons/fi";
-import WWButton from "../../components/WWbutton";
-import GymCard from "../../components/GymCard";
+import WWButton from "../../components/WWbutton.jsx";
+import GymCard from "../../components/GymCard.jsx";
 import api from "../../api/axios";
 
 
