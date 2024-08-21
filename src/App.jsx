@@ -19,6 +19,7 @@ import GymForm from "./Pages/GymOwnerPages/GymForm";
 import ForgotPasswordForm from "./Pages/ResetPassword/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import SlotPage from "./Pages/GymOwnerPages/SlotPage";
+import OwnerDashboard from "./Pages/GymOwnerPages/OwnerDashboard";
 
 // Main application component
 function App() {
@@ -71,6 +72,7 @@ function App() {
               <Route path="/owners/gymForm" element={<GymForm />} />
               <Route path="/owners/accounts" element={<OwnerProfile />} />
               <Route path="/owners/slots" element={<SlotPage />} />
+              <Route path="/owners/dashboard" element={<OwnerDashboard />} />
               {/* Error Routes */}
               <Route path="*" element={<PageNotFound />} />
             </Routes>

@@ -76,6 +76,9 @@ function Bookings() {
             return bookingDate.isAfter(today, "day");
           });
 
+          console.log(futureBookings);
+          
+
           setTodayBookings(todayBookings);
 
           console.log(todayBookings[0]._id);
