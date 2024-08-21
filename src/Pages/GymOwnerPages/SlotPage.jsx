@@ -1,180 +1,228 @@
-import { TimePicker } from "antd";
-import React, { useState } from "react";
+import { TimePicker, DatePicker, Space } from "antd";
+import React, { useCallback, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import dayjs from 'dayjs';
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import { MdOutlineAddBox } from "react-icons/md";
+import dayjs from "dayjs";
 
-export default function App() {
+const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const Slot = () => {
   const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
-      times: Array(7).fill({ start: "", end: "" }),
-      selectedDays: Array(7).fill(false),
-      blockedDates: new Set(),
+      times: daysOfWeek.map(() => []), // Initialize empty arrays for each day
+      selectedDays: Array(daysOfWeek.length).fill(false),
     },
   });
 
-  const format = 'HH:mm';
+  const format = "HH:mm";
+  const [selectedDates, setSelectedDates] = useState([]);
 
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-
-  const times = watch("times");
   const selectedDays = watch("selectedDays");
-  const blockedDates = watch("blockedDates");
+  const times = watch("times");
 
-  const handleTimeChange = (index, field, value) => {
+  const handleCheckboxChange = useCallback(
+    (index) => {
+      const newSelectedDays = [...selectedDays];
+      newSelectedDays[index] = !newSelectedDays[index];
+      setValue("selectedDays", newSelectedDays);
+    },
+    [selectedDays, setValue]
+  );
+
+  const handleDateChange = useCallback(
+    (date, dateString) => {
+      if (date && !selectedDates.includes(dateString)) {
+        setSelectedDates([...selectedDates, dateString]);
+      }
+    },
+    [selectedDates]
+  );
+
+  const handleRemoveDate = useCallback(
+    (dateToRemove) => {
+      setSelectedDates(selectedDates.filter((date) => date !== dateToRemove));
+    },
+    [selectedDates]
+  );
+
+  const addTimeSlot = (dayIndex) => {
+    console.log(dayIndex);
+    // handleCheckboxChange(dayIndex);
     const newTimes = [...times];
-    newTimes[index] = { ...newTimes[index], [field]: value };
+    if (!newTimes[dayIndex]) {
+      newTimes[dayIndex] = [];
+    }
+    newTimes[dayIndex].push({ from: "", to: "" });
     setValue("times", newTimes);
   };
 
-  const handleCheckboxChange = (index) => {
-    const newSelectedDays = [...selectedDays];
-    newSelectedDays[index] = !newSelectedDays[index];
-    setValue("selectedDays", newSelectedDays);
-  };
-
-  const handleSave = (data) => {
-    const dataToSend = data.times
-      .map((time, index) => {
-        if (data.selectedDays[index]) {
-          return { day: daysOfWeek[index], ...time };
-        }
-        return null;
-      })
-      .filter(Boolean);
-
-    console.log("Data to send:", dataToSend);
-    // Here you would make a POST request to your backend with dataToSend
-  };
-
-  const handleAddUnavailableDates = () => {
-    setShowDatePicker(true);
-  };
-
-  const handleDateSubmit = () => {
-    if (selectedDate) {
-      const dateIndex = new Date(selectedDate).getDay(); // Get index (0 for Sunday, 1 for Monday, etc.)
-      if (dateIndex >= 0 && dateIndex < 7) {
-        setValue(
-          "blockedDates",
-          new Set([...blockedDates, dateIndex])
-        );
-        setValue(
-          "selectedDays",
-          selectedDays.map((day, index) =>
-            index === dateIndex ? false : day
-          )
-        );
-      }
-      setShowDatePicker(false);
-      setSelectedDate("");
+  const removeTimeSlot = (dayIndex, intervalIndex) => {
+    const newTimes = [...times];
+    newTimes[dayIndex].splice(intervalIndex, 1);
+    if (newTimes[dayIndex].length === 0) {
+      newTimes[dayIndex] = undefined;
     }
+    setValue("times", newTimes);
   };
 
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+  const onSubmit = (data) => {
+    console.log("Data to send:", {
+      times: data.times,
+      blockedDates: selectedDates,
+    });
+  };
 
   return (
-    <div className="flex flex-col h-screen">
-      
-      <div className="flex">
-        
-        <div className="flex flex-col w-2/3 shadow-md">
-          <div className="flex items-center justify-between p-2">
-            <h1 className="text-lg">Default</h1>
-            <button
-              className="px-4 py-2 border rounded"
-              onClick={handleSubmit(handleSave)}
-            >
-              Save
-            </button>
-          </div>
-          
+    <div className="flex flex-col justify-center items-center min-h-[35rem] my-6">
+      <div className="flex flex-col justify-center mx-4 md:flex-row md:space-x-12 md:px-16 shadow-lg">
+        {/* Time Container */}
+        <div className="flex flex-col justify-center p-4">
+          <h2 className="mb-2 font-semibold text-2xl">Slots</h2>
+          <p className="mb-4 text-gray-500 text-base">
+            Set available workout time slots for your clients
+          </p>
           {daysOfWeek.map((day, index) => (
-            <div
-              key={day}
-              className="grid items-center grid-cols-4 gap-3 mb-3"
-            >
+            <div key={day} className="flex flex-col space-y-2 md:flex-row my-2">
+              {/* Check box */}
               <Controller
                 name={`selectedDays[${index}]`}
                 control={control}
                 render={({ field }) => (
-                  <input
-                    type="checkbox"
-                    id={day}
-                    {...field}
-                    onChange={() => handleCheckboxChange(index)}
-                  />
+                  <div className="flex items-center mb-2 md:space-x-2">
+                    <input
+                      type="checkbox"
+                      id={day}
+                      {...field}
+                      onChange={() => handleCheckboxChange(index)}
+                      className="mr-2"
+                    />
+                    <label htmlFor={day} className="w-24 text-base text-white">
+                      {day}
+                    </label>
+                    <button
+                      type="button"
+                      className="text-red-500"
+                      onClick={() => addTimeSlot(index)}
+                    >
+                      <MdOutlineAddBox />
+                    </button>
+                  </div>
                 )}
               />
-              <label htmlFor={day}>{day}</label>
-              <Controller
-                name={`times[${index}].start`}
-                control={control}
-                render={({ field }) => (
-                    <TimePicker format={format} className="bg-transparent"/>
-                )}
-              />
-              <Controller
-                name={`times[${index}].end`}
-                control={control}
-                render={({ field }) => (
-                    <TimePicker format={format} className="bg-transparent"/>
-                )}
-              />
+
+              {/* Time Pickers */}
+              <div className="flex flex-col space-y-2">
+                {times[index]?.map((time, timeIndex) => (
+                  <div
+                    key={timeIndex}
+                    className="flex flex-col items-end space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 sm:items-center sm:ml-4"
+                  >
+                    <Controller
+                      name={`times[${index}][${timeIndex}].start`}
+                      control={control}
+                      render={({ field }) => (
+                        <TimePicker
+                          format={format}
+                          className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
+                          {...field}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name={`times[${index}][${timeIndex}].end`}
+                      control={control}
+                      render={({ field }) => (
+                        <TimePicker
+                          format={format}
+                          className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
+                          {...field}
+                        />
+                      )}
+                    />
+                    <button
+                      type="button"
+                      className="text-red-500 mt-2"
+                      onClick={() => removeTimeSlot(index, timeIndex)}
+                    >
+                      <IoMdCloseCircleOutline className="text-red-600" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
 
-        <div className="flex">
-          <div className="p-4 rounded-lg shadow-md">
-            <h2 className="mb-2 text-lg">Block Dates</h2>
-            <p className="mb-4">
+        {/* Block Date Container */}
+        <div className="flex justify-center">
+          <div className="p-4">
+            <h2 className="mb-2 font-semibold text-2xl">Block Dates</h2>
+            <p className="mb-4 text-gray-500 text-base">
               Add dates when you will be unavailable to take calls
             </p>
-            <button
-              className="w-full px-4 py-2 text-white bg-green-600 rounded-lg"
-              onClick={handleAddUnavailableDates}
-            >
-              Add Unavailable Dates
-            </button>
-            {showDatePicker && (
-              <div className="mt-4">
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="px-2 py-1 mb-2 border rounded"
+
+            {/* Date Picker */}
+            <div className="flex flex-col items-start space-y-2 my-4">
+              <Space direction="vertical" style={{ width: "100%" }}>
+                <Controller
+                  name="date"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      {...field}
+                      className="w-full px-3 py-2 rounded-none bg-wwbg !text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border border-red-500 hover:bg-wwbg"
+                      style={{ width: "100%" }}
+                      onChange={handleDateChange}
+                    />
+                  )}
                 />
-                <button
-                  className="px-4 py-2 border rounded"
-                  onClick={handleDateSubmit}
-                >
-                  Block Date
-                </button>
-              </div>
-            )}
-            {blockedDates.size > 0 && (
-              <div className="p-4 mt-4 rounded-lg">
-                <h3>Blocked Dates</h3>
-                <ul>
-                  {[...blockedDates].map((dayIndex) => (
-                    <li key={dayIndex}>{daysOfWeek[dayIndex]}</li>
+              </Space>
+            </div>
+
+            {/* Selected Dates List */}
+            {selectedDates.length > 0 && (
+              <div className="my-4">
+                <h3 className="mb-2 text-lg">Selected Dates</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+                  {selectedDates.map((date, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <span className="px-2 py-1 text-red-50">
+                        {dayjs(date).format("YYYY-MM-DD")}
+                      </span>
+                      <button
+                        className="text-red-500"
+                        onClick={() => handleRemoveDate(date)}
+                      >
+                        x
+                      </button>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
+
+            {/* Submit button */}
+            <button
+              type="button"
+              className="w-full md:w-40 px-4 bg-wwred py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Save
+            </button>
           </div>
         </div>
-
       </div>
     </div>
   );
-}
+};
+
+export default Slot;
