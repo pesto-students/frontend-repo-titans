@@ -1,9 +1,11 @@
 import { TimePicker, DatePicker, Space } from "antd";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { MdOutlineAddBox } from "react-icons/md";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
+import api from "../../api/axios";
 
 const daysOfWeek = [
   "Sunday",
@@ -16,10 +18,18 @@ const daysOfWeek = [
 ];
 
 const Slot = () => {
-  const { control, handleSubmit, watch, setValue } = useForm({
+  const {
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    setFocus,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       times: daysOfWeek.map(() => []), // Initialize empty arrays for each day
       selectedDays: Array(daysOfWeek.length).fill(false),
+      frequency: "weekly",
     },
   });
 
@@ -28,6 +38,27 @@ const Slot = () => {
 
   const selectedDays = watch("selectedDays");
   const times = watch("times");
+  const frequency = watch("frequency");
+
+  // Set focus when required field is not there
+  useEffect(() => {
+    const firstErrorField = Object.keys(errors)[0];
+    if (firstErrorField) {
+      setFocus(firstErrorField);
+      setTimeout(() => {
+        const element = document.getElementById(firstErrorField);
+        if (element) {
+          // Calculate the desired scroll position
+          const elementPosition =
+            element.getBoundingClientRect().top + window.pageYOffset;
+          window.scrollTo({
+            top: elementPosition - 150,
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+    }
+  }, [errors, setFocus]);
 
   const handleCheckboxChange = useCallback(
     (index) => {
@@ -55,7 +86,7 @@ const Slot = () => {
   );
 
   const addTimeSlot = (dayIndex) => {
-    console.log(dayIndex);
+    // console.log(dayIndex);
     // handleCheckboxChange(dayIndex);
     const newTimes = [...times];
     if (!newTimes[dayIndex]) {
@@ -69,16 +100,54 @@ const Slot = () => {
     const newTimes = [...times];
     newTimes[dayIndex].splice(intervalIndex, 1);
     if (newTimes[dayIndex].length === 0) {
-      newTimes[dayIndex] = undefined;
+      newTimes[dayIndex] = [];
     }
     setValue("times", newTimes);
   };
 
-  const onSubmit = (data) => {
-    console.log("Data to send:", {
-      times: data.times,
-      blockedDates: selectedDates,
-    });
+  const onSubmit = async (data) => {
+    const formattedTimes = data.times.map((dayTimes) =>
+      (dayTimes || []).map(({ from, to }) => ({
+        from: from ? dayjs(from).format(format) : undefined,
+        to: to ? dayjs(to).format(format) : undefined,
+      }))
+    );
+
+    // Check if every day has no time slots
+    const allDaysEmpty = formattedTimes.every(
+      (dayTimes) => dayTimes.length === 0
+    );
+
+    if (allDaysEmpty) {
+      return toast.error("Please add at least one time slot for a day.");
+    }
+
+    try {
+      const formData = {
+        times: formattedTimes,
+        blockedDates: selectedDates,
+        frequency: frequency,
+      };
+
+      const response = await api.patch(`/gyms/schedule`, {
+        formData,
+      });
+
+      // Handle successful login
+      if (response.status === 200) {
+        toast.success("Your slot has been saved successfully");
+      }
+    } catch (error) {
+      console.error("Error while saving user details:", error);
+
+      if (error.response && error.response.data.errors) {
+        const { errors } = error.response.data;
+
+        if (errors) {
+          toast.error(errors.message);
+        }
+      }
+    }
   };
 
   return (
@@ -93,24 +162,32 @@ const Slot = () => {
           {daysOfWeek.map((day, index) => (
             <div key={day} className="flex flex-col space-y-2 md:flex-row my-2">
               {/* Check box */}
+              <div className="w-full flex items-center my-6 md:hidden">
+                <div className="flex-grow border-t border-red-600"></div>
+                <span className="mx-4 text-white-400">{day}</span>
+                <div className="flex-grow border-t border-red-600"></div>
+              </div>
               <Controller
                 name={`selectedDays[${index}]`}
                 control={control}
                 render={({ field }) => (
-                  <div className="flex items-center mb-2 md:space-x-2">
+                  <div className="flex items-center justify-end mb-2 lg:space-x-2">
                     <input
                       type="checkbox"
                       id={day}
                       {...field}
                       onChange={() => handleCheckboxChange(index)}
-                      className="mr-2"
+                      className="mr-2 hidden"
                     />
-                    <label htmlFor={day} className="w-24 text-base text-white">
+                    <label
+                      htmlFor={day}
+                      className="w-24 hidden text-base text-white md:block"
+                    >
                       {day}
                     </label>
                     <button
                       type="button"
-                      className="text-red-500"
+                      className="text-red-500 text-right mr-2 lg:mr-0"
                       onClick={() => addTimeSlot(index)}
                     >
                       <MdOutlineAddBox />
@@ -121,49 +198,90 @@ const Slot = () => {
 
               {/* Time Pickers */}
               <div className="flex flex-col space-y-2">
-                {times[index]?.map((time, timeIndex) => (
-                  <div
-                    key={timeIndex}
-                    className="flex flex-col items-end space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3 sm:items-center sm:ml-4"
-                  >
-                    <Controller
-                      name={`times[${index}][${timeIndex}].start`}
-                      control={control}
-                      render={({ field }) => (
-                        <TimePicker
-                          format={format}
-                          className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
-                          {...field}
-                        />
-                      )}
-                    />
-                    <Controller
-                      name={`times[${index}][${timeIndex}].end`}
-                      control={control}
-                      render={({ field }) => (
-                        <TimePicker
-                          format={format}
-                          className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
-                          {...field}
-                        />
-                      )}
-                    />
-                    <button
-                      type="button"
-                      className="text-red-500 mt-2"
-                      onClick={() => removeTimeSlot(index, timeIndex)}
+                {times[index] &&
+                  times[index].map((time, timeIndex) => (
+                    <div
+                      key={timeIndex}
+                      className="flex flex-col items-end space-y-3 lg:flex-row lg:space-y-0 lg:space-x-3 lg:items-center lg:ml-4"
                     >
-                      <IoMdCloseCircleOutline className="text-red-600" />
-                    </button>
-                  </div>
-                ))}
+                      <div className="w-full">
+                        <Controller
+                          name={`times[${index}][${timeIndex}].from`}
+                          control={control}
+                          rules={{ required: "Start time is required" }}
+                          render={({ field }) => (
+                            <TimePicker
+                              format={format}
+                              className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
+                              {...field}
+                            />
+                          )}
+                        />
+                        {errors.times?.[index]?.[timeIndex]?.from && (
+                          <p className="text-red-500 text-xs mt-1 text-right">
+                            {errors.times[index][timeIndex].from.message}*
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="w-full">
+                        <Controller
+                          name={`times[${index}][${timeIndex}].to`}
+                          control={control}
+                          rules={{ required: "End time is required" }}
+                          render={({ field }) => (
+                            <TimePicker
+                              format={format}
+                              className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
+                              {...field}
+                            />
+                          )}
+                        />
+                        {errors.times?.[index]?.[timeIndex]?.to && (
+                          <p className="text-red-500 text-xs mt-1 text-right">
+                            {errors.times[index][timeIndex].to.message}*
+                          </p>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        className="text-red-500 mt-2"
+                        onClick={() => removeTimeSlot(index, timeIndex)}
+                      >
+                        <IoMdCloseCircleOutline className="text-red-600" />
+                      </button>
+                    </div>
+                  ))}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Block Date Container */}
-        <div className="flex justify-center">
+        {/* Frequency Dropdown and Block Date Container */}
+        <div className="flex justify- flex-col">
+          {/* Frequency Dropdown */}
+          <div className="p-4">
+            <h2 className="mb-2 font-semibold text-2xl">Frequency</h2>
+            <p className="mb-4 text-gray-500 text-base">
+              Select how often these slots should be applied
+            </p>
+            <Controller
+              name="frequency"
+              control={control}
+              render={({ field }) => (
+                <select
+                  {...field}
+                  className="w-full px-3 py-2 text-center text-white border border-red-500 rounded-none bg-wwbg focus:outline-none focus:border-red-500"
+                >
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
+                </select>
+              )}
+            />
+          </div>
+
+          {/* Block Date Container */}
           <div className="p-4">
             <h2 className="mb-2 font-semibold text-2xl">Block Dates</h2>
             <p className="mb-4 text-gray-500 text-base">
@@ -216,7 +334,7 @@ const Slot = () => {
               className="w-full md:w-40 px-4 bg-wwred py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={handleSubmit(onSubmit)}
             >
-              Save
+              Submit
             </button>
           </div>
         </div>
