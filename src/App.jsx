@@ -20,10 +20,21 @@ import ForgotPasswordForm from "./Pages/ResetPassword/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import SlotPage from "./Pages/GymOwnerPages/SlotPage";
 import OwnerDashboard from "./Pages/GymOwnerPages/OwnerDashboard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Main application component
 function App() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        // Add your default query options here
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
+
   return (
+    <QueryClientProvider client={queryClient}>
     <Routes>
       <Route
         path="*"
@@ -80,6 +91,7 @@ function App() {
         }
       />
     </Routes>
+    </QueryClientProvider>
   );
 }
 
