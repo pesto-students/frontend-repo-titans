@@ -172,13 +172,13 @@ function BookNow({ price, gym_id, schedule }) {
         date: date,
         from: fromTime.format(format),
         to: toTime.format(format),
-        totalPrice: (price * duration).toFixed(2),
+        totalPrice: (price/60 * duration).toFixed(2),
         gym_id: gym_id || '66c9bebd50f64d1ee0b4ac2e',
       })
 
       if (response.status === 201) {
         toast.success('Booking successful')
-        setTimeout(() => navigate('/payment'), 5000)
+        setTimeout(() => navigate('/payment'), 1500)
       }
     } catch (error) {
       if (error.response && error.response.data.errors) {
