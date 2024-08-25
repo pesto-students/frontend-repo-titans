@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaLocationArrow, FaRegStar } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
 import { IoIosTimer } from "react-icons/io";
 import { IoPricetagOutline } from "react-icons/io5";
 import { RiPinDistanceLine } from "react-icons/ri";
+import api from "../../api/axios";
 
 const SearchPanel = ({
   onLocationChange,
@@ -11,6 +12,22 @@ const SearchPanel = ({
   onFilterChange,
   onSortChange,
 }) => {
+  const [cities, setCities] = useState([]);
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await api.get("/gyms/cities"); // Adjust the endpoint as needed
+        setCities(response.data); // Assuming response.data is the array of cities
+
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      }
+    };
+
+    fetchCities();
+  }, []);
 
   const handleSortClick = (criteria) => {
     onSortChange(criteria);
@@ -25,9 +42,12 @@ const SearchPanel = ({
           className="ml-2 text-center text-white rounded-none appearance-none bg-wwbg focus:outline-none"
           onChange={(e) => onLocationChange(e.target.value)}
         >
-          <option value="">location</option>
-          <option value="Delhi">Delhi</option>
-          <option value="Pune">Pune</option>
+          <option value="">Location</option>
+          {cities.map((city) => (
+            <option key={city.name} value={city.name}>
+              {city.name}
+            </option>
+          ))}
         </select>
       </div>
 
