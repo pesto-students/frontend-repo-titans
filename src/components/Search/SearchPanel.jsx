@@ -11,22 +11,23 @@ const SearchPanel = ({
   onFilterChange,
   onSortChange,
 }) => {
-  
+
   const handleSortClick = (criteria) => {
     onSortChange(criteria);
   };
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4 my-6 md:px-36">
+    <div className="flex flex-col items-center justify-between my-6 space-y-4 md:flex-row md:space-y-0 md:space-x-4 md:px-36">
       {/* Location Detector */}
       <div className="flex items-center justify-center">
         <FaLocationArrow className="text-red-500" size={12} />
         <select
-          className="text-center appearance-none text-white rounded-none bg-wwbg focus:outline-none ml-2"
+          className="ml-2 text-center text-white rounded-none appearance-none bg-wwbg focus:outline-none"
           onChange={(e) => onLocationChange(e.target.value)}
         >
-          <option>Location</option>
-          <option>Delhi</option>
+          <option value="">location</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Pune">Pune</option>
         </select>
       </div>
 
@@ -35,14 +36,14 @@ const SearchPanel = ({
         <input
           type="search"
           placeholder="Search for your gym..."
-          className="w-full py-2 pl-10 pr-4 flex items-center border border-gray-600 bg-wwbg text-white focus:outline-none focus:border-red-500"
+          className="flex items-center w-full py-2 pl-10 pr-4 text-white border border-gray-600 bg-wwbg focus:outline-none focus:border-red-500"
           onChange={(e) => onSearchChange(e.target.value)}
         />
         <FiSearch className="absolute ml-3 text-gray-500" />
       </div>
 
       {/* Filter Buttons */}
-      <div className="flex items-center flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+      <div className="flex flex-col items-center space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
         <div className="flex space-x-4">
           <button
             onClick={() => handleSortClick("distance")}
