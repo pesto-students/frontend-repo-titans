@@ -60,9 +60,6 @@ const Profile = () => {
           // Google Map Link
           // const googleMapsLink = `https://maps.google.com/maps?q=${gymData.map_detail?.coordinates[1]},${gymData.map_detail?.coordinates[0]}`;
 
-          const googleMapsLink =
-            "https://maps.google.com/maps/4Zmd31STWKRtpko96";
-
           // console.log(googleMapsLink);
 
           // Use reset to initialize or update form values
@@ -78,7 +75,7 @@ const Profile = () => {
             maxOccupants: gymData.total_occupancy || "",
             gstNumber: gymData.gst_number || "",
             facilities: gymData.facilities || [],
-            googleMapsLink: googleMapsLink || "",
+            // googleMapsLink: googleMapsLink || "",
             // TODO: TypeError: Failed to execute 'createObjectURL' on 'URL': Overload resolution failed.
             images: gymData.images || [],
           });
@@ -425,6 +422,7 @@ const Profile = () => {
                     <input
                       {...field}
                       value={displayValue}
+                      placeholder="maps.google.com/maps/4Zmd31STWKRtpko96"
                       onChange={(e) => {
                         const val = e.target.value;
                         setDisplayValue(val.replace(/^https:\/\//, ""));
