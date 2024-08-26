@@ -333,7 +333,7 @@ const Profile = () => {
                 {...register("phone_number", {
                   required: "Phone Number is required",
                   pattern: {
-                    value: /^\d{10}$/,
+                    value: /^[0-9]{10}$/,
                     message: "Invalid contact number",
                   },
                 })}

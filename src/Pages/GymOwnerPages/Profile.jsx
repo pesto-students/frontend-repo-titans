@@ -201,6 +201,19 @@ const Profile = () => {
               defaultValue=""
               rules={{
                 required: "Gym Name is required",
+                minLength: {
+                  value: 2,
+                  message: "Gym name must be at least 2 characters",
+                },
+                maxLength: {
+                  value: 100,
+                  message: "Gym name must be less than 100 characters",
+                },
+                pattern: {
+                  value: /^[a-zA-Z\s]+$/,
+                  message:
+                    "Gym name should only contain letters, numbers, and spaces",
+                },
               }}
               render={({ field }) => (
                 <input
@@ -243,7 +256,7 @@ const Profile = () => {
                   {...field}
                   placeholder="Description"
                   className={`w-full px-3 py-2 h-28 border ${
-                    errors.addressLine1 ? "border-red-500" : "border-gray-600"
+                    errors.description ? "border-red-500" : "border-gray-600"
                   } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                 />
               )}
