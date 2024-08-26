@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import GymForm1 from "../../components/GymForm/GymForm1";
 import GymForm2 from "../../components/GymForm/GymForm2";
@@ -10,8 +10,16 @@ const GymForm = () => {
   const [currentForm, setCurrentForm] = useState("form1");
   const [formData1, setFormData1] = useState({});
   const [formData2, setFormData2] = useState({});
-  const { login } = useAuth();
+  const { login, status } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (status === "active") {
+      navigate("/owners/dashboard");
+    }
+
+    toast.error("Not allowed to view this form");
+  }, [status]);
 
   const handleForm1Submit = (data) => {
     setFormData1(data);
