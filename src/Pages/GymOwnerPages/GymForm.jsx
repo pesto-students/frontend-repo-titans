@@ -3,11 +3,15 @@ import { toast } from "react-toastify";
 import GymForm1 from "../../components/GymForm/GymForm1";
 import GymForm2 from "../../components/GymForm/GymForm2";
 import api from "../../api/axios.js";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth.jsx";
 
 const GymForm = () => {
   const [currentForm, setCurrentForm] = useState("form1");
   const [formData1, setFormData1] = useState({});
   const [formData2, setFormData2] = useState({});
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleForm1Submit = (data) => {
     setFormData1(data);
@@ -29,6 +33,11 @@ const GymForm = () => {
           // Append each image file individually under the same "images" key
           value.forEach((file) => {
             formData.append("images", file);
+          });
+        } else if (key === "facilities" && Array.isArray(value)) {
+          // Append each image file individually under the same "images" key
+          value.forEach((facility) => {
+            formData.append("facilities", facility);
           });
         } else {
           formData.append(key, value);
@@ -52,7 +61,17 @@ const GymForm = () => {
       });
 
       console.log("Response:", response.data);
-      toast.success("Your details were saved successfully");
+      // Handle successful
+      if (response.status === 200) {
+        toast.success("Your details were saved successfully");
+
+        const { reason, status } = { status: "inactive", reason: "" };
+        login(response.data.token, "inactive");
+
+        navigate("/owners/status", {
+          state: { reason, status },
+        });
+      }
     } catch (error) {
       console.error("Error adding new gym form details:", error);
 
