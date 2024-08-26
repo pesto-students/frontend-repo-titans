@@ -66,38 +66,29 @@ function LandingPage() {
               </span>
             </p>
 
+            {/* Facilities */}
             <div className="flex items-center justify-center my-6 md:my-12">
               <div className="flex flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
-                <div className="flex justify-center space-x-4">
-                  <Link to="#" className="inline-block m-1">
-                    <button className="h-12 text-sm font-semibold text-center text-white bg-transparent border shadow-sm w-36 hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border-wwred">
-                      WeightLifting
-                    </button>
-                  </Link>
-                  <Link to="#" className="inline-block m-1">
-                    <button className="h-12 text-sm font-semibold text-center text-white bg-transparent border shadow-sm w-36 hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border-wwred">
-                      Calisthenics
-                    </button>
-                  </Link>
+                <div className="flex justify-center item space-x-4">
+                  <div className="flex items-center justify-center h-12 text-sm font-semibold text-white bg-transparent border shadow-sm w-36 focus-visible:outline-none border-wwred">
+                    WeightLifting
+                  </div>
+                  <div className="flex items-center justify-center h-12 text-sm font-semibold text-white bg-transparent border shadow-sm w-36 focus-visible:outline-none border-wwred">
+                    Calisthenics
+                  </div>
                 </div>
                 <div className="flex justify-center space-x-4">
-                  <Link to="#" className="inline-block m-1">
-                    <button className="h-12 text-sm font-semibold text-center text-white bg-transparent border shadow-sm w-36 hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border-wwred">
-                      Yoga
-                    </button>
-                  </Link>
-                  <Link to="#" className="inline-block m-1">
-                    <button className="h-12 text-sm font-semibold text-center text-white bg-transparent border shadow-sm w-36 hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border-wwred">
-                      Cardio
-                    </button>
-                  </Link>
+                  <div className="flex items-center justify-center h-12 text-sm font-semibold text-white bg-transparent border shadow-sm w-36 focus-visible:outline-none border-wwred">
+                    Yoga
+                  </div>
+                  <div className="flex items-center justify-center h-12 text-sm font-semibold text-white bg-transparent border shadow-sm w-36 focus-visible:outline-none border-wwred">
+                    Cardio
+                  </div>
                 </div>
                 <div className="flex justify-center">
-                  <Link to="#" className="inline-block m-1">
-                    <button className="h-12 text-sm font-semibold text-center text-white bg-transparent border shadow-sm w-36 hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border-wwred">
-                      Gymnastics
-                    </button>
-                  </Link>
+                  <div className="flex items-center justify-center h-12 text-sm font-semibold text-white bg-transparent border shadow-sm w-36 focus-visible:outline-none border-wwred">
+                    Gymnastics
+                  </div>
                 </div>
               </div>
             </div>
