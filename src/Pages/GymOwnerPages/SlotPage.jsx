@@ -17,6 +17,13 @@ const daysOfWeek = [
   "Saturday",
 ];
 
+const disableDate = (current) => {
+  const today = dayjs().startOf('day'); // Start of today to avoid time issues
+  const year = today.add(12, 'month');
+  return current.isBefore(today) || current.isAfter(year);
+};
+
+
 const Slot = () => {
   const {
     control,
@@ -152,15 +159,15 @@ const Slot = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-[35rem] my-6">
-      <div className="flex flex-col justify-center mx-4 md:flex-row md:space-x-12 md:px-16 shadow-lg">
+      <div className="flex flex-col justify-center mx-4 shadow-lg md:flex-row md:space-x-12 md:px-16">
         {/* Time Container */}
         <div className="flex flex-col justify-center p-4">
-          <h2 className="mb-2 font-semibold text-2xl">Slots</h2>
-          <p className="mb-4 text-gray-500 text-base">
+          <h2 className="mb-2 text-2xl font-semibold">Slots</h2>
+          <p className="mb-4 text-base text-gray-500">
             Set available workout time slots for your clients
           </p>
           {daysOfWeek.map((day, index) => (
-            <div key={day} className="flex flex-col space-y-2 md:flex-row my-2">
+            <div key={day} className="flex flex-col my-2 space-y-2 md:flex-row">
               {/* Check box */}
               <div className="w-full flex items-center my-6 md:!hidden">
                 <div className="flex-grow border-t border-red-600"></div>
@@ -177,7 +184,7 @@ const Slot = () => {
                       id={day}
                       {...field}
                       onChange={() => handleCheckboxChange(index)}
-                      className="mr-2 hidden"
+                      className="hidden mr-2"
                     />
                     <label
                       htmlFor={day}
@@ -187,7 +194,7 @@ const Slot = () => {
                     </label>
                     <button
                       type="button"
-                      className="text-red-500 text-right mr-2 lg:mr-0"
+                      className="mr-2 text-right text-red-500 lg:mr-0"
                       onClick={() => addTimeSlot(index)}
                     >
                       <MdOutlineAddBox />
@@ -212,13 +219,13 @@ const Slot = () => {
                           render={({ field }) => (
                             <TimePicker
                               format={format}
-                              className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
+                              className="w-full text-white border border-gray-600 rounded-none bg-wwbg focus:outline-none focus:border-red-500"
                               {...field}
                             />
                           )}
                         />
                         {errors.times?.[index]?.[timeIndex]?.from && (
-                          <p className="text-red-500 text-xs mt-1 text-right">
+                          <p className="mt-1 text-xs text-right text-red-500">
                             {errors.times[index][timeIndex].from.message}*
                           </p>
                         )}
@@ -232,20 +239,20 @@ const Slot = () => {
                           render={({ field }) => (
                             <TimePicker
                               format={format}
-                              className="w-full rounded-none bg-wwbg text-white focus:outline-none focus:border-red-500 border border-gray-600"
+                              className="w-full text-white border border-gray-600 rounded-none bg-wwbg focus:outline-none focus:border-red-500"
                               {...field}
                             />
                           )}
                         />
                         {errors.times?.[index]?.[timeIndex]?.to && (
-                          <p className="text-red-500 text-xs mt-1 text-right">
+                          <p className="mt-1 text-xs text-right text-red-500">
                             {errors.times[index][timeIndex].to.message}*
                           </p>
                         )}
                       </div>
                       <button
                         type="button"
-                        className="text-red-500 mt-2"
+                        className="mt-2 text-red-500"
                         onClick={() => removeTimeSlot(index, timeIndex)}
                       >
                         <IoMdCloseCircleOutline className="text-red-600" />
@@ -258,11 +265,11 @@ const Slot = () => {
         </div>
 
         {/* Frequency Dropdown and Block Date Container */}
-        <div className="flex justify- flex-col">
+        <div className="flex flex-col justify-">
           {/* Frequency Dropdown */}
           <div className="p-4">
-            <h2 className="mb-2 font-semibold text-2xl">Frequency</h2>
-            <p className="mb-4 text-gray-500 text-base">
+            <h2 className="mb-2 text-2xl font-semibold">Frequency</h2>
+            <p className="mb-4 text-base text-gray-500">
               Select how often these slots should be applied
             </p>
             <Controller
@@ -283,13 +290,13 @@ const Slot = () => {
 
           {/* Block Date Container */}
           <div className="p-4">
-            <h2 className="mb-2 font-semibold text-2xl">Block Dates</h2>
-            <p className="mb-4 text-gray-500 text-base">
+            <h2 className="mb-2 text-2xl font-semibold">Block Dates</h2>
+            <p className="mb-4 text-base text-gray-500">
               Add dates when you will be unavailable to take calls
             </p>
 
             {/* Date Picker */}
-            <div className="flex flex-col items-start space-y-2 my-4">
+            <div className="flex flex-col items-start my-4 space-y-2">
               <Space direction="vertical" style={{ width: "100%" }}>
                 <Controller
                   name="date"
@@ -300,6 +307,7 @@ const Slot = () => {
                       className="w-full px-3 py-2 rounded-none bg-wwbg !text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border border-red-500 hover:bg-wwbg"
                       style={{ width: "100%" }}
                       onChange={handleDateChange}
+                      disabledDate={disableDate}
                     />
                   )}
                 />
@@ -310,7 +318,7 @@ const Slot = () => {
             {selectedDates.length > 0 && (
               <div className="my-4">
                 <h3 className="mb-2 text-lg">Selected Dates</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+                <div className="grid grid-cols-2 gap-4 text-center md:grid-cols-3">
                   {selectedDates.map((date, index) => (
                     <div key={index} className="flex items-center space-x-2">
                       <span className="px-2 py-1 text-red-50">

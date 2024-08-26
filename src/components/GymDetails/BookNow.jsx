@@ -85,13 +85,13 @@ function BookNow({ price, gym_id, schedule }) {
     return times
   }
 
-  // Handle it when Date change
+  // Handle date change
   const handleDateChange = (date) => {
-    setValue('date', date)
+    setValue('date', date);
     if (date) {
-      updateAvailableSlots(date)
+      updateAvailableSlots(date);
     }
-  }
+  };
 
   // Handle it when Slot changes
   const handleSlotChange = (e) => {
@@ -129,6 +129,11 @@ function BookNow({ price, gym_id, schedule }) {
     const mins = minutes % 60
     return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`
   }
+  const disableDate = (current) => {
+    const today = dayjs().startOf('day'); // Start of today to avoid time issues
+    const twoMonthsFromNow = today.add(2, 'month');
+    return current.isBefore(today) || current.isAfter(twoMonthsFromNow);
+  };
 
   const onSubmit = async () => {
     if (!isAuthenticated) {
@@ -208,6 +213,7 @@ function BookNow({ price, gym_id, schedule }) {
                 {...field}
                 className='w-full px-3 py-2 rounded-none bg-wwbg !text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 border border-red-500 hover:bg-wwbg'
                 style={{ width: '100%' }}
+                disabledDate={disableDate}
                 onChange={handleDateChange}
               />
             )}
