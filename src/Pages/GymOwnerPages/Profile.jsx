@@ -171,7 +171,12 @@ const Profile = () => {
       //   }
     } catch (error) {
       console.error("Failed to update gym details", error);
-      toast.error("Failed to update gym details.");
+
+      if (error.response.data.errors[0]) {
+        toast.error(error.response.data.errors[0]);
+      } else {
+        toast.error("Failed to update gym details. Something went wrong");
+      }
     }
   };
 
