@@ -505,7 +505,7 @@ const GymForm2 = ({ onSubmit, initialData, onPrevious }) => {
                   <input
                     type="file"
                     multiple
-                    accept="image/*"
+                    accept=".jpg, .jpeg, .png, .svg, .heic, .webp"
                     ref={fileInputRef}
                     onChange={(e) => {
                       const files = Array.from(e.target.files);

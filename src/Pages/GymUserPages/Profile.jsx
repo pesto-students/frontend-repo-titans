@@ -6,6 +6,16 @@ import ChangePasswordModal from "../../components/ChangePasswordModal.jsx";
 import { toast } from "react-toastify";
 import api from "../../api/axios.js";
 
+// List of allowed MIME types and file extensions
+const allowedTypes = [
+  "image/jpeg", // for .jpg and .jpeg
+  "image/png", // for .png
+  "image/svg+xml", // for .svg
+  "image/heic", // for .heic
+  "image/webp", // for .webp
+];
+const allowedExtensions = ["jpg", "jpeg", "png", "svg", "heic", "webp"];
+
 const Profile = () => {
   const {
     control,
@@ -86,8 +96,26 @@ const Profile = () => {
   }, [errors, setFocus]);
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]; // Get the selected file
+
     if (file) {
+      // Check MIME type
+      if (!allowedTypes.includes(file.type)) {
+        toast.error(
+          "Please select a valid image file: .jpg, .jpeg, .png, .svg, .heic, or .webp."
+        );
+        return;
+      }
+
+      // Check file extension
+      const fileExtension = file.name.split(".").pop().toLowerCase();
+      if (!allowedExtensions.includes(fileExtension)) {
+        toast.error(
+          "Please select a valid image file with the extension .jpg, .jpeg, .png, .svg, .heic, or .webp."
+        );
+        return;
+      }
+
       // Update file input value manually to be handled in `onSubmit`
       setValue("profile_image", file);
       const imageUrl = URL.createObjectURL(file);
@@ -176,7 +204,7 @@ const Profile = () => {
                 <input
                   type="file"
                   id="fileInput"
-                  accept="image/*"
+                  accept=".jpg, .jpeg, .png, .svg, .heic, .webp"
                   onChange={handleFileChange}
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
@@ -354,14 +382,15 @@ const Profile = () => {
           <div className="mt-6 text-center">
             <button
               type="submit"
-              className="w-full md:w-1/4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              className="w-full md:w-1/4 px-4 py-2 bg-red-600 text-white hover:bg-red-700"
             >
               Save
             </button>
           </div>
         </form>
       </div>
-      <ChangePasswordModal isOpen={isModalOpen} onClose={closeModal} />
+      {/* Putting in comments since we are not going for changepassword at the moment we are using forgot password */}
+      {/* <ChangePasswordModal isOpen={isModalOpen} onClose={closeModal} /> */}
     </div>
   );
 };
