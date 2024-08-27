@@ -23,7 +23,7 @@ const GymDetails = ({ gym, handlePrev, handleNext, handleApprove, handleDeny, pa
                 </div>
 
                 <p className="mb-4">
-                    <strong className="text-gray-300">Description:</strong> 
+                    <strong className="text-gray-300">Description:</strong>
                     <span className="text-gray-400"> {gym.description}</span>
                 </p>
                 <hr className="my-6 border-gray-600" />
@@ -54,6 +54,18 @@ const GymDetails = ({ gym, handlePrev, handleNext, handleApprove, handleDeny, pa
                         <p><strong className="text-gray-300">Request Date:</strong> <span className="text-gray-400">{moment(gym.req_creation_Date).format('D MMMM YYYY')}</span></p>
                     </div>
                 </div>
+                <hr className="my-6 border-gray-600" />
+                <div className='flex flex-col gap-10 md:gap-24 md:flex-row '>
+                    <div>
+                        <p><strong className="text-gray-300">Email:</strong> <span className="text-gray-400">{gym.owner_id.email}</span></p>
+                        <p><strong className="text-gray-300">Phone Number:</strong> <span className="text-gray-400">{gym.owner_id.phone_number}</span></p>
+                    </div>
+                    <div>
+                        <p><strong className="text-gray-300">Upi:</strong> <span className="text-gray-400">{gym.owner_id.upi_id}</span></p>
+
+                    </div>
+                </div>
+                <hr className="my-6 border-gray-600" />
 
                 <div className="flex flex-col items-center justify-between mt-6 space-y-4 lg:flex-row lg:space-y-0">
                     {/* Left side: Prev and Next buttons */}
@@ -89,7 +101,7 @@ function AdminPage() {
     const fetchGymData = async (page) => {
         try {
             const response = await api.get(`gyms/admin/pending?limit=1&page=${page}`);
-            
+
             setGym(response.data.data[0]);
             setTotalPages(response.data.pagination.totalPages); // Set the total number of pages from the response
         } catch (error) {
@@ -115,9 +127,9 @@ function AdminPage() {
 
     const handleApprove = async () => {
         try {
-            const response = await api.patch(`gyms/${gym._id}/response`,{"status": "approve"});
+            const response = await api.patch(`gyms/${gym._id}/response`, { "status": "approve" });
             console.log(response);
-            
+
             alert('Gym approved successfully.');
             fetchGymData(pageNo);
         } catch (error) {
@@ -127,7 +139,7 @@ function AdminPage() {
 
     const handleDeny = async () => {
         try {
-            const response = await api.patch(`gyms/${gym._id}/response`,{"status": "reject"});
+            const response = await api.patch(`gyms/${gym._id}/response`, { "status": "reject" });
             console.log(response);
             alert('Gym denied successfully.');
             fetchGymData(pageNo);
