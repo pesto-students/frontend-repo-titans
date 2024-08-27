@@ -108,10 +108,15 @@ function LandingPage() {
             </p>
 
             {/* Button For Gym Owner to enroll*/}
-            <div className="items-center justify-between mt-10 lg:flex gap-x-6">
+            <div className="flex flex-col md:flex-row items-center justify-between mt-10 lg:flex gap-x-6">
               <Link to="/owners/register" className="inline-block m-1">
                 <button className="bg-transparent px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full w-40 mb-2 text-center border border-wwred">
                   Enroll Now
+                </button>
+              </Link>
+              <Link to="/owners/login" className="inline-block m-1">
+                <button className="bg-red-700 px-3.5 py-2.5 text-sm font-semibold text-wwtext shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full w-40 mb-2 text-center border border-red-300">
+                  Login
                 </button>
               </Link>
             </div>
