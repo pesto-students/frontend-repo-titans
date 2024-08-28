@@ -3,6 +3,7 @@ import { FaChartBar, FaDollarSign, FaClock, FaUser } from "react-icons/fa";
 import api from "../../api/axios";
 import TableComponent from "../../components/Bookings/TableComponent";
 import { usePagination } from "pagination-react-js";
+import StatsSkeleton from "../../components/Skeletons/StasSkeleton";
 
 const OwnerDashboard = () => {
   const [stats, setStats] = useState({
@@ -14,6 +15,18 @@ const OwnerDashboard = () => {
 
   const [extensionRequests, setExtensionRequests] = useState([]);
   const [upcomingBookings, setUpcomingBookings] = useState([]);
+
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 4000)); // Simulate 4 seconds network delay
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
 
   useEffect(() => {
     api
@@ -87,9 +100,8 @@ const OwnerDashboard = () => {
               <li
                 key={index}
                 onClick={() => setActivePage(number)}
-                className={`pagination-item ${
-                  number === pageNumbers.activePage ? "active" : ""
-                }`}
+                className={`pagination-item ${number === pageNumbers.activePage ? "active" : ""
+                  }`}
               >
                 {number}
               </li>
@@ -118,105 +130,109 @@ const OwnerDashboard = () => {
     <div>
       {/* Stats */}
       <div className="px-4 py-8 space-y-6">
-        <section>
-          <h3 className="mb-4 text-lg font-bold">Stats</h3>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {/* Total Bookings */}
-            <div className="flex items-center space-x-6 px-6 py-4 bg-wwpopdiv shadow-lg">
-              <div className="flex-shrink-0 p-3">
-                <FaChartBar size={24} className="text-red-500" />
-              </div>
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-base md:text-xl font-semibold text-wwsecondarytext">
-                  Total Bookings
-                </h2>
-                <div className="flex justify-between items-center mt-1">
-                  <p className="text-xl md:text-2xl font-semibold text-wwtext">
-                    {stats.totalBookings.current}
-                  </p>
-                  <span
-                    className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
-                  >
-                    {stats.totalBookings.growthPercentage > 0 ? "▲" : "▼"}{" "}
-                    {stats.totalBookings.growthPercentage}%
-                  </span>
-                </div>
-              </div>
-            </div>
 
-            {/* Total Revenue */}
-            <div className="flex items-center space-x-6 px-6 py-4 bg-wwpopdiv shadow-lg">
-              <div className="flex-shrink-0 p-3">
-                <FaDollarSign size={24} className="text-red-500" />
-              </div>
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-base md:text-xl font-semibold text-wwsecondarytext">
-                  Total Revenue
-                </h2>
-                <div className="flex justify-between items-center mt-1">
-                  <p className="text-xl md:text-2xl font-semibold text-wwtext">
-                    {stats.totalRevenue.current.toLocaleString()}
-                  </p>
-                  <span
-                    className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
-                  >
-                    {stats.totalRevenue.growthPercentage > 0 ? "▲" : "▼"}{" "}
-                    {stats.totalRevenue.growthPercentage}%
-                  </span>
+        {loading ? (<StatsSkeleton />) : (
+          <section>
+            <h3 className="mb-4 text-lg font-bold">Stats</h3>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {/* Total Bookings */}
+              <div className="flex items-center px-6 py-4 space-x-6 shadow-lg bg-wwpopdiv">
+                <div className="flex-shrink-0 p-3">
+                  <FaChartBar size={24} className="text-red-500" />
+                </div>
+                <div className="flex flex-col flex-1">
+                  <h2 className="text-base font-semibold md:text-xl text-wwsecondarytext">
+                    Total Bookings
+                  </h2>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-xl font-semibold md:text-2xl text-wwtext">
+                      {stats.totalBookings.current}
+                    </p>
+                    <span
+                      className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
+                    >
+                      {stats.totalBookings.growthPercentage > 0 ? "▲" : "▼"}{" "}
+                      {stats.totalBookings.growthPercentage}%
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Total Hours */}
-            <div className="flex items-center space-x-6 px-6 py-4 bg-wwpopdiv shadow-lg">
-              <div className="flex-shrink-0 p-3">
-                <FaClock size={24} className="text-red-500" />
-              </div>
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-base md:text-xl font-semibold text-wwsecondarytext">
-                  Total Hours
-                </h2>
-                <div className="flex justify-between items-center mt-1">
-                  <p className="text-xl md:text-2xl font-semibold text-wwtext">
-                    {stats.totalHours.current} hr
-                  </p>
-                  <span
-                    className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
-                  >
-                    {stats.totalHours.growthPercentage > 0 ? "▲" : "▼"}{" "}
-                    {stats.totalHours.growthPercentage}%
-                  </span>
+              {/* Total Revenue */}
+              <div className="flex items-center px-6 py-4 space-x-6 shadow-lg bg-wwpopdiv">
+                <div className="flex-shrink-0 p-3">
+                  <FaDollarSign size={24} className="text-red-500" />
+                </div>
+                <div className="flex flex-col flex-1">
+                  <h2 className="text-base font-semibold md:text-xl text-wwsecondarytext">
+                    Total Revenue
+                  </h2>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-xl font-semibold md:text-2xl text-wwtext">
+                      {stats.totalRevenue.current.toLocaleString()}
+                    </p>
+                    <span
+                      className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
+                    >
+                      {stats.totalRevenue.growthPercentage > 0 ? "▲" : "▼"}{" "}
+                      {stats.totalRevenue.growthPercentage}%
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Total Users */}
-            <div className="flex items-center space-x-6 px-6 py-4 bg-wwpopdiv shadow-lg">
-              <div className="flex-shrink-0 p-3">
-                <FaUser size={24} className="text-red-500" />
+              {/* Total Hours */}
+              <div className="flex items-center px-6 py-4 space-x-6 shadow-lg bg-wwpopdiv">
+                <div className="flex-shrink-0 p-3">
+                  <FaClock size={24} className="text-red-500" />
+                </div>
+                <div className="flex flex-col flex-1">
+                  <h2 className="text-base font-semibold md:text-xl text-wwsecondarytext">
+                    Total Hours
+                  </h2>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-xl font-semibold md:text-2xl text-wwtext">
+                      {stats.totalHours.current} hr
+                    </p>
+                    <span
+                      className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
+                    >
+                      {stats.totalHours.growthPercentage > 0 ? "▲" : "▼"}{" "}
+                      {stats.totalHours.growthPercentage}%
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-base md:text-xl font-semibold text-wwsecondarytext">
-                  Total Users
-                </h2>
-                <div className="flex justify-between items-center mt-1">
-                  <p className="text-xl md:text-2xl font-semibold text-wwtext">
-                    {stats.totalUniqueUsers.current}
-                  </p>
-                  <span
-                    className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
-                  >
-                    {stats.totalUniqueUsers.growthPercentage > 0 ? "▲" : "▼"}{" "}
-                    {stats.totalUniqueUsers.growthPercentage}%
-                  </span>
+
+              {/* Total Users */}
+              <div className="flex items-center px-6 py-4 space-x-6 shadow-lg bg-wwpopdiv">
+                <div className="flex-shrink-0 p-3">
+                  <FaUser size={24} className="text-red-500" />
+                </div>
+                <div className="flex flex-col flex-1">
+                  <h2 className="text-base font-semibold md:text-xl text-wwsecondarytext">
+                    Total Users
+                  </h2>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-xl font-semibold md:text-2xl text-wwtext">
+                      {stats.totalUniqueUsers.current}
+                    </p>
+                    <span
+                      className={`text-sm md:text-base font-semibold text-red-500 ml-4`}
+                    >
+                      {stats.totalUniqueUsers.growthPercentage > 0 ? "▲" : "▼"}{" "}
+                      {stats.totalUniqueUsers.growthPercentage}%
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
+
 
         {extensionRequests.length === 0 && upcomingBookings.length === 0 && (
-          <div className="flex items-center justify-center text-center p-6 min-h-64 bg-wwpopdiv shadow-lg w-full mb-6">
+          <div className="flex items-center justify-center w-full p-6 mb-6 text-center shadow-lg min-h-64 bg-wwpopdiv">
             <p className="text-lg text-wwtext">No bookings to show</p>
           </div>
         )}
