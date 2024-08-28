@@ -6,7 +6,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import api from "../../api/axios.js";
 
-const OwnerSignup = () => {
+const Signup = () => {
   const {
     register,
     handleSubmit,
@@ -270,4 +270,4 @@ const OwnerSignup = () => {
   );
 };
 
-export default OwnerSignup;
+export default Signup;

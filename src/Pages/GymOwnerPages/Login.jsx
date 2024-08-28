@@ -4,10 +4,10 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth.jsx";
 import api from "../../api/axios.js";
 
-const OwnerLogin = () => {
+const Login = () => {
   const {
     register,
     handleSubmit,
@@ -217,4 +217,4 @@ const OwnerLogin = () => {
   );
 };
 
-export default OwnerLogin;
+export default Login;

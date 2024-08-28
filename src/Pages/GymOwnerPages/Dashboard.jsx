@@ -5,7 +5,7 @@ import TableComponent from "../../components/Bookings/TableComponent";
 import { usePagination } from "pagination-react-js";
 import StatsSkeleton from "../../components/Skeletons/StasSkeleton";
 
-const OwnerDashboard = () => {
+const Dashboard = () => {
   const [stats, setStats] = useState({
     totalBookings: { current: 0, growthPercentage: 0 },
     totalRevenue: { current: 0, growthPercentage: 0 },
@@ -305,4 +305,4 @@ const OwnerDashboard = () => {
   );
 };
 
-export default OwnerDashboard;
+export default Dashboard;
