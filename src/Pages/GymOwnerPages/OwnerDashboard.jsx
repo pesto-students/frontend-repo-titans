@@ -15,18 +15,17 @@ const OwnerDashboard = () => {
 
   const [extensionRequests, setExtensionRequests] = useState([]);
   const [upcomingBookings, setUpcomingBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] = useState(true)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 4000)); // Simulate 4 seconds network delay
+      await new Promise((resolve) => setTimeout(resolve, 4)); // Simulate 4 seconds network delay
       setLoading(false);
     };
 
     fetchData();
   }, []);
-
 
   useEffect(() => {
     api
@@ -57,6 +56,37 @@ const OwnerDashboard = () => {
       });
   }, []);
 
+  const handleApprove = async (request) => {
+    try {
+      console.log(request._id);
+      console.log(request);
+      await api.patch(`/bookings/extends`, {
+        extensionId: request._id,
+        status: "approved",
+      });
+
+      setExtensionRequests((prevRequests) =>
+        prevRequests.filter((r) => r._id !== request._id)
+      );
+    } catch (error) {
+      console.error("Error approving request:", error);
+    }
+  };
+
+  const handleReject = async (request) => {
+    try {
+      await api.patch(`/bookings/extends`, {
+        extensionId: request._id,
+        status: "cancelled",
+      });
+      setExtensionRequests((prevRequests) =>
+        prevRequests.filter((r) => r._id !== request._id)
+      );
+    } catch (error) {
+      console.error("Error rejecting request:", error);
+    }
+  };
+
   const extensionWithPagination = usePagination({
     activePage: 1,
     recordsPerPage: 5,
@@ -77,16 +107,21 @@ const OwnerDashboard = () => {
     permanentLastNumber: true,
   });
 
-  const renderTableWithPagination = (pagination, data, title) => {
+  const renderTableWithPagination = (pagination, data, title, actions) => {
     const { records, pageNumbers, setActivePage } = pagination;
+    const paginatedData = data.slice(
+      records.indexOfFirst,
+      records.indexOfLast + 1
+    );
 
     return (
       <section>
         <h3 className="mb-4 text-lg font-bold">{title}</h3>
         <TableComponent
-          columns={Object.keys(data[0] || {}).length}
-          headers={Object.keys(data[0] || {})}
-          data={data.slice(records.indexOfFirst, records.indexOfLast + 1)}
+          columns={Object.keys(data[0] || {}).length + 1} // +1 for actions column
+          headers={[...Object.keys(data[0] || {})]}
+          data={paginatedData}
+          actions={actions}
         />
         <nav role="navigation" aria-label="Pagination Navigation">
           <ul className="flex justify-center gap-4 mt-4 pagination sm:gap-8">
@@ -100,8 +135,9 @@ const OwnerDashboard = () => {
               <li
                 key={index}
                 onClick={() => setActivePage(number)}
-                className={`pagination-item ${number === pageNumbers.activePage ? "active" : ""
-                  }`}
+                className={`pagination-item ${
+                  number === pageNumbers.activePage ? "active" : ""
+                }`}
               >
                 {number}
               </li>
@@ -130,8 +166,9 @@ const OwnerDashboard = () => {
     <div>
       {/* Stats */}
       <div className="px-4 py-8 space-y-6">
-
-        {loading ? (<StatsSkeleton />) : (
+        {loading ? (
+          <StatsSkeleton />
+        ) : (
           <section>
             <h3 className="mb-4 text-lg font-bold">Stats</h3>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -230,10 +267,9 @@ const OwnerDashboard = () => {
           </section>
         )}
 
-
-        {extensionRequests.length === 0 && upcomingBookings.length === 0 && (
+        {extensionRequests.length === 0 && (
           <div className="flex items-center justify-center w-full p-6 mb-6 text-center shadow-lg min-h-64 bg-wwpopdiv">
-            <p className="text-lg text-wwtext">No bookings to show</p>
+            <p className="text-lg text-wwtext">No Extension request to show</p>
           </div>
         )}
 
@@ -243,10 +279,17 @@ const OwnerDashboard = () => {
           {extensionRequests.length > 0 &&
             renderTableWithPagination(
               extensionWithPagination,
-              removeUnwantedFromPastbookings,
-              "Extension Requests"
+              extensionRequests,
+              "Extension Requests",
+              { onApprove: handleApprove, onReject: handleReject }
             )}
         </div>
+
+        {upcomingBookings.length === 0 && (
+          <div className="flex items-center justify-center w-full p-6 mb-6 text-center shadow-lg min-h-64 bg-wwpopdiv">
+            <p className="text-lg text-wwtext">No Upcoming bookings to show</p>
+          </div>
+        )}
 
         {/* upcoming bookings */}
         <div className="upcoming">
