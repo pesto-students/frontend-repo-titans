@@ -262,11 +262,19 @@ const Slot = () => {
       return toast.error("Please ensure that 'From' time is before 'To' time.");
     }
 
-    console.log(uniqueTimes);
+    // console.log(uniqueTimes);
+
+    // Convert data to day-wise format
+    const dayWiseData = daysOfWeek.reduce((result, day, index) => {
+      result[day] = uniqueTimes[index] || []; // Map each index to a day
+      return result;
+    }, {});
+
+    // console.log(dayWiseData);
 
     try {
       const formData = {
-        slots: uniqueTimes,
+        slots: dayWiseData,
         blockedDates: selectedDates,
         frequency: frequency,
       };
