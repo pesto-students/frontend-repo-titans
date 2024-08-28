@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import useAuth from "../../hooks/useAuth.jsx";
 import api from "../../api/axios.js";
+import BookNowSkeleton from "../Skeletons/BookNowSkeleton.jsx";
 
 function BookNow({ price, gym_id, schedule }) {
   const format = "HH:mm";
@@ -23,19 +24,37 @@ function BookNow({ price, gym_id, schedule }) {
       duration: 60,
     },
   });
-
+  const [loading, setLoading] = useState(true); // State to manage loading
+  
   // Watch for changes in date, slot, and time
   const watchedDate = watch("date");
   const watchedSlot = watch("slot");
   const watchedTime = watch("time");
   const watchedDuration = watch("duration");
 
+  //below was the code before skeleton
   // Update slots when the date changes
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 4000)); // Simulate 4 seconds network delay
+      setLoading(false);
+    };
+  
+    fetchData();
+  }, []);
+  
+
   useEffect(() => {
     if (watchedDate) {
       updateAvailableSlots(watchedDate);
     }
   }, [watchedDate]);
+
+    // Simulate network delay and update available slots
+    
+
 
   // Update time options and maximum duration when the slot changes
   useEffect(() => {
@@ -220,6 +239,10 @@ function BookNow({ price, gym_id, schedule }) {
   };
 
   return (
+    <div>
+      {loading ? (
+        <BookNowSkeleton /> // Show skeleton loader when loading
+      ) : (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="p-4 space-y-6 shadow-lg md:p-8"
@@ -374,6 +397,8 @@ function BookNow({ price, gym_id, schedule }) {
         </button>
       </div>
     </form>
+      )}
+      </div>
   );
 }
 

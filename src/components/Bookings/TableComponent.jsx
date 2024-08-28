@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useState } from "react";
+import TableComponentSkeleton from "../Skeletons/TableComponentSkeleton";
 
 /*pass any number of headers , it will turn into that no. of headers
 eg : 
@@ -10,8 +11,22 @@ data={data}
 /> */
 
 const TableComponent = ({ columns, data, headers }) => {
+
+  
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 4000)); // Simulate 4 seconds network delay
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="overflow-auto bg-wwpopdiv">
+    <>
+    {loading ? (<TableComponentSkeleton columns={headers.length} rows={data.length}/>) : ( <div className="overflow-auto bg-wwpopdiv">
       <table className="min-w-full divide-y divide-red-700">
         <thead className="bg-wwbg">
           <tr>
@@ -48,7 +63,10 @@ const TableComponent = ({ columns, data, headers }) => {
           )}
         </tbody>
       </table>
-    </div>
+    </div>)}
+   
+    </>
+    
   );
 };
 
