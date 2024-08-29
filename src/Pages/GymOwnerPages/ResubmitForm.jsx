@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { PiCurrencyInrLight } from "react-icons/pi";
+import indianPincodes from "indian-pincodes";
 import api from "../../api/axios";
 import dataStates from "../../data/states.json";
 import { toast } from "react-toastify";
@@ -131,6 +132,22 @@ const ResubmitForm = () => {
     }
   }, [getValues]);
 
+  const handlePincodeChange = () => {
+    const pincode = getValues("pincode");
+
+    if (pincode && /^\d{6}$/.test(pincode)) {
+      const address = indianPincodes.getPincodeDetails(Number(pincode));
+      console.log(address);
+      if (address) {
+        setValue("city", address.name);
+        setValue("state", address.state);
+        console.log(getValues("pincode"));
+        console.log(getValues("city"));
+        console.log(getValues("state"));
+      }
+    }
+  };
+
   // setting the price
   const handleSliderChange = (event) => {
     setValue("price", event.target.value);
@@ -156,18 +173,6 @@ const ResubmitForm = () => {
         console.log("response : " + response);
         toast.success("Gym details updated successfully.");
       }
-
-      //   if (Object.keys(updatedFields).length > 0) {
-      // const response = await api.patch(`/gyms`, data, {
-      //   headers: { 'Content-Type': 'multipart/form-data' },
-      // })
-      // if (response.status === 200) {
-      //   console.log('response : ' + response)
-      //   toast.success('Gym details updated successfully.')
-      // }
-      //   } else {
-      // toast.success('No changes detected.')
-      //   }
     } catch (error) {
       console.error("Failed to update gym details", error);
 
@@ -424,7 +429,11 @@ const ResubmitForm = () => {
                   render={({ field }) => (
                     <input
                       {...field}
-                      placeholder="PIN"
+                      placeholder="Pincode"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handlePincodeChange();
+                      }}
                       className={`w-full px-3 py-2 border ${
                         errors.pincode ? "border-red-500" : "border-gray-600"
                       } bg-wwbg text-white focus:outline-none focus:border-red-500`}

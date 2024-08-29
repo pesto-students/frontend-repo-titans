@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { PiCurrencyInrLight } from "react-icons/pi";
+import indianPincodes from "indian-pincodes";
 import api from "../../api/axios";
 import dataStates from "../../data/states.json";
 import { toast } from "react-toastify";
@@ -129,6 +130,22 @@ const Profile = () => {
       setDisplayValue(values.googleMapsLink.replace(/^https:\/\//, ""));
     }
   }, [getValues]);
+
+  const handlePincodeChange = () => {
+    const pincode = getValues("pincode");
+
+    if (pincode && /^\d{6}$/.test(pincode)) {
+      const address = indianPincodes.getPincodeDetails(Number(pincode));
+      console.log(address);
+      if (address) {
+        setValue("city", address.name);
+        setValue("state", address.state);
+        console.log(getValues("pincode"));
+        console.log(getValues("city"));
+        console.log(getValues("state"));
+      }
+    }
+  };
 
   // setting the price
   const handleSliderChange = (event) => {
@@ -437,7 +454,11 @@ const Profile = () => {
                   render={({ field }) => (
                     <input
                       {...field}
-                      placeholder="PIN"
+                      placeholder="Pincode"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handlePincodeChange();
+                      }}
                       className={`w-full px-3 py-2 border ${
                         errors.pincode ? "border-red-500" : "border-gray-600"
                       } bg-wwbg text-white focus:outline-none focus:border-red-500`}
