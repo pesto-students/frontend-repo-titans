@@ -4,6 +4,8 @@ import { PiCurrencyInrLight } from "react-icons/pi";
 import api from "../../api/axios";
 import dataStates from "../../data/states.json";
 import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const GAP_FROM_TOP = 150; // When submitting focusing on input will give 150 gap on top
 // Price-related constants
@@ -39,11 +41,24 @@ const Profile = () => {
   const [initialValues, setInitialValues] = useState([]);
   const [displayValue, setDisplayValue] = useState("");
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
+  const { status } = useAuth();
 
   // Watch fields
   const watchFacilities = watch("facilities", []);
   const watchImages = watch("images");
   const price = watch("price");
+
+  // Checks Owners status and navigate them accordingly
+  useEffect(() => {
+    if (status === "inactive" || status === "rejected") {
+      navigate("/owners/status");
+      toast.error("Not allowed to view this form");
+    } else if (status === "new") {
+      navigate("/owners/gymForm");
+      toast.error("Not allowed to view this form");
+    }
+  }, [status]);
 
   // Render the values for all the fields
   useEffect(() => {
@@ -132,7 +147,7 @@ const Profile = () => {
   const onSubmit = async (data) => {
     try {
       // Prepare data to send only modified fields
-      // TODO: Compare the initial data and changed data and update only new changes
+      // TODO: Compare the initial data and changed data and send only new changes
       //   console.log(data)
       //   console.log(initialValues._id)
 
@@ -387,7 +402,7 @@ const Profile = () => {
                         Select State
                       </option>
                       {states.map((state) => (
-                        <option key={state.code} value={state.code}>
+                        <option key={state.code} value={state.name}>
                           {state.name}
                         </option>
                       ))}
