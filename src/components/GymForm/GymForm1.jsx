@@ -108,6 +108,8 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   type="number"
                   id="contactInfo"
                   placeholder="9876543210"
+                  minLength={10}
+                  maxLength={10}
                   {...register("contactInfo", {
                     required: "Contact Information is required",
                     pattern: {
