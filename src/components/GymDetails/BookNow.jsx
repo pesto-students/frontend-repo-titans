@@ -8,7 +8,6 @@ import { useForm, Controller } from "react-hook-form";
 import useAuth from "../../hooks/useAuth.jsx";
 import api from "../../api/axios.js";
 
-
 function BookNow({ price, gym_id, schedule }) {
   const format = "HH:mm";
   const navigate = useNavigate();
@@ -31,14 +30,12 @@ function BookNow({ price, gym_id, schedule }) {
   const watchedTime = watch("time");
   const watchedDuration = watch("duration");
 
-
   // Update slots when the date changes
   useEffect(() => {
     if (watchedDate) {
       updateAvailableSlots(watchedDate);
     }
   }, [watchedDate]);
-
 
   // Update time options and maximum duration when the slot changes
   useEffect(() => {
@@ -222,13 +219,15 @@ function BookNow({ price, gym_id, schedule }) {
       if (error.response && error.response.data.errors) {
         const { errors } = error.response.data;
 
-        if (errors.global) {
+        if (errors.global === "User profile incomplete") {
+          navigate("/users");
+          toast.error("Please fill your full name and phone number.");
+        } else {
           toast.error(errors.global);
         }
       }
     }
   };
-
 
   return (
     <div>
@@ -375,10 +374,11 @@ function BookNow({ price, gym_id, schedule }) {
         <div className="flex justify-center w-full">
           <button
             type="submit"
-            className={`w-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm ${slots.length > 0
-              ? "bg-wwred hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-              : "bg-transparent text-red-500 border border-red-500 cursor-not-allowed" // Styles for disabled state
-              }`}
+            className={`w-full px-4 py-2.5 text-sm font-semibold text-white shadow-sm ${
+              slots.length > 0
+                ? "bg-wwred hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                : "bg-transparent text-red-500 border border-red-500 cursor-not-allowed" // Styles for disabled state
+            }`}
             disabled={slots.length === 0}
           >
             Book Now
