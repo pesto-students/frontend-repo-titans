@@ -8,31 +8,66 @@ import CurrentLocationMap from '../../components/GymDetails/CurrentLocationMap'
 import AboutSection from '../../components/GymDetails/AboutSection'
 import ContactGYM from '../../components/GymDetails/ContactGYM'
 import api from '../../api/axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { setAboutLoadingFalse } from '../../redux/aboutSectionSlice'
+import { setBookNowLoadingFalse } from '../../redux/bookNowSlice'
+import { setCarouselLoadingFalse } from '../../redux/CarouselSlice'
+import { setContactGymLoadingFalse } from '../../redux/contactGymSlice'
+import { setCurrentLocationLoadingFalse } from '../../redux/currentLocationSlice'
+import { setFacilitiesLoadingFalse } from '../../redux/facilitiesSlice'
+import GymDetailsSkeleton from '../../components/Skeletons/GymDetailsSkeleton'
 
 function GymDetailsPage() {
   const { id } = useParams() // Here we have the GymID
   const [gymDetails, setGymDetails] = useState(null)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  // Select loading states from Redux
+  const aboutSectionLoading = useSelector((state) => state.isGymDetailsLoading.aboutSection.loading);
+  const bookNowLoading = useSelector((state) => state.isGymDetailsLoading.bookNow.loading);
+  const carouselLoading = useSelector((state) => state.isGymDetailsLoading.carousel.loading);
+  const contactGymLoading = useSelector((state) => state.isGymDetailsLoading.contactGym.loading);
+  const currentLocationLoading = useSelector((state) => state.isGymDetailsLoading.currentLocation.loading);
+  const facilitiesLoading = useSelector((state) => state.isGymDetailsLoading.aboutSection.loading);
+
+  // Check if any component is still loading
+  const isLoading = carouselLoading || aboutSectionLoading || bookNowLoading || facilitiesLoading || contactGymLoading || currentLocationLoading;
+  const dispatchAboutSection = useDispatch();
+  const dispatchBookNow = useDispatch();
+  const dispatchCarousel = useDispatch();
+  const dispatchContactGym = useDispatch();
+  const dispatchCurrentLocation = useDispatch();
+  const dispatchFacilities = useDispatch();
+
+  function dispatchToFalse() {
+    dispatchAboutSection(setAboutLoadingFalse());
+    dispatchBookNow(setBookNowLoadingFalse())
+    dispatchCarousel(setCarouselLoadingFalse())
+    dispatchContactGym(setContactGymLoadingFalse())
+    dispatchCurrentLocation(setCurrentLocationLoadingFalse())
+    dispatchFacilities(setFacilitiesLoadingFalse())
+  }
 
   useEffect(() => {
     const fetchGymDetails = async () => {
       try {
-        const response = await api.get(`/gyms/${id}`)
-        setGymDetails(response.data)
+        const response = await api.get(`/gyms/${id}`);
+
+        setGymDetails(response.data);
+        dispatchToFalse()
+
       } catch (error) {
-        setError('Error fetching gym details')
-      } finally {
-        setLoading(false)
+        setError('Error fetching gym details');
       }
-    }
+    };
 
-    fetchGymDetails()
-  }, [id]) // Dependency on gymid to refetch if it changes
+    fetchGymDetails();
+  }, [id]); // Dependency on gymid to refetch if it changes
 
-  if (loading) {
-    return <div>Loading...</div>
+  if (isLoading || !gymDetails) { // Check overall loading state
+    return <div><GymDetailsSkeleton /></div>; // Show loading until all components are ready
   }
+
 
   if (error) {
     return <div>{error}</div>
@@ -81,7 +116,7 @@ function GymDetailsPage() {
           />
           <ContactGYM
             email={gymDetails.owner_id.email ?? "email@email.com"}
-            phone={gymDetails.owner_id.phone_number ?? 7900000000}
+            phone={gymDetails.owner_id.phone_number ?? "790*******"}
           />
         </section>
       </div>

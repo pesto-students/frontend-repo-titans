@@ -8,7 +8,6 @@ import api from "../../api/axios";
 import GymCardSkeleton from "../../components/Skeletons/GymCardSkeleton";
 
 
-const simulateDelay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Search = () => {
   const [gymsToRender, setGymsToRender] = useState([]);
@@ -44,7 +43,6 @@ const Search = () => {
     useInfiniteQuery({
       queryKey: ["gyms", search, filters, location, sort],
       queryFn: async ({ pageParam = 1 }) => {
-        await simulateDelay(4000); // 4-second delay
         const res = await api.get("/gyms", { params: params });
         console.log(res);
 
