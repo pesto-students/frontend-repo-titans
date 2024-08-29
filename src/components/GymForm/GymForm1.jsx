@@ -187,7 +187,7 @@ const GymForm1 = ({ onSubmit, initialData }) => {
                   {...register("upiId", {
                     required: "UPI ID is required",
                     pattern: {
-                      value: /^[a-zA-Z0-9._@-]+$/,
+                      value: /^[a-zA-Z0-9.-]{2, 256}@[a-zA-Z]{2, 64}$/,
                       message: "Invalid UPI ID format",
                     },
                   })}
