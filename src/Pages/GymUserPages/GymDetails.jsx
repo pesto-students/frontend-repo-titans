@@ -9,12 +9,12 @@ import AboutSection from '../../components/GymDetails/AboutSection'
 import ContactGYM from '../../components/GymDetails/ContactGYM'
 import api from '../../api/axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setAboutLoadingFalse } from '../../redux/aboutSectionSlice'
-import { setBookNowLoadingFalse } from '../../redux/bookNowSlice'
-import { setCarouselLoadingFalse } from '../../redux/CarouselSlice'
-import { setContactGymLoadingFalse } from '../../redux/contactGymSlice'
-import { setCurrentLocationLoadingFalse } from '../../redux/currentLocationSlice'
-import { setFacilitiesLoadingFalse } from '../../redux/facilitiesSlice'
+import { setAboutLoadingFalse, setAboutLoadingTrue } from '../../redux/aboutSectionSlice'
+import { setBookNowLoadingFalse, setBookNowLoadingTrue } from '../../redux/bookNowSlice'
+import { setCarouselLoadingFalse, setCarouselLoadingTrue } from '../../redux/CarouselSlice'
+import { setContactGymLoadingFalse, setContactGymLoadingTrue } from '../../redux/contactGymSlice'
+import { setCurrentLocationLoadingFalse, setCurrentLocationLoadingTrue } from '../../redux/currentLocationSlice'
+import { setFacilitiesLoadingFalse, setFacilitiesLoadingTrue } from '../../redux/facilitiesSlice'
 import GymDetailsSkeleton from '../../components/Skeletons/GymDetailsSkeleton'
 
 function GymDetailsPage() {
@@ -32,24 +32,30 @@ function GymDetailsPage() {
 
   // Check if any component is still loading
   const isLoading = carouselLoading || aboutSectionLoading || bookNowLoading || facilitiesLoading || contactGymLoading || currentLocationLoading;
-  const dispatchAboutSection = useDispatch();
-  const dispatchBookNow = useDispatch();
-  const dispatchCarousel = useDispatch();
-  const dispatchContactGym = useDispatch();
-  const dispatchCurrentLocation = useDispatch();
-  const dispatchFacilities = useDispatch();
+  const dispatch = useDispatch();
+  
 
   function dispatchToFalse() {
-    dispatchAboutSection(setAboutLoadingFalse());
-    dispatchBookNow(setBookNowLoadingFalse())
-    dispatchCarousel(setCarouselLoadingFalse())
-    dispatchContactGym(setContactGymLoadingFalse())
-    dispatchCurrentLocation(setCurrentLocationLoadingFalse())
-    dispatchFacilities(setFacilitiesLoadingFalse())
+    dispatch(setAboutLoadingFalse());
+    dispatch(setBookNowLoadingFalse())
+    dispatch(setCarouselLoadingFalse())
+    dispatch(setContactGymLoadingFalse())
+    dispatch(setCurrentLocationLoadingFalse())
+    dispatch(setFacilitiesLoadingFalse())
+  }
+
+  function dispatchToTrue() {
+    dispatch(setAboutLoadingTrue());
+    dispatch(setBookNowLoadingTrue())
+    dispatch(setCarouselLoadingTrue())
+    dispatch(setContactGymLoadingTrue())
+    dispatch(setCurrentLocationLoadingTrue())
+    dispatch(setFacilitiesLoadingTrue())
   }
 
   useEffect(() => {
     const fetchGymDetails = async () => {
+      dispatchToTrue()
       try {
         const response = await api.get(`/gyms/${id}`);
 

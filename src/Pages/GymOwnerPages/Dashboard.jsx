@@ -20,6 +20,8 @@ const Dashboard = () => {
   const [upcomingBookings, setUpcomingBookings] = useState([]);
 
   const dispatch = useDispatch();
+
+
   const statsLoading = useSelector((state) => state.isOwnerDashboardLoading.stats.loading);
   const tableLoading = useSelector((state) => state.isOwnerDashboardLoading.tableComp.loading);
 
@@ -28,9 +30,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchDashboard = async () => {
+     
       dispatch(setStatsLoadingTrue())
       dispatch(setTableCompLoadingTrue())
-
       api
         .get("/gyms/owners/stats")
         .then((response) => {
@@ -58,9 +60,11 @@ const Dashboard = () => {
         })
         .catch((error) => {
           console.error("Error fetching stats:", error);
-        });
+        }).finally(
+          dispatch(setTableCompLoadingFalse())
+        );
 
-      dispatch(setTableCompLoadingFalse())
+     
     }
     fetchDashboard()
   }, []);
