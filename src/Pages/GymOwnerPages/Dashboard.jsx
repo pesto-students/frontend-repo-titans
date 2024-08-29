@@ -4,6 +4,9 @@ import api from "../../api/axios";
 import TableComponent from "../../components/Bookings/TableComponent";
 import { usePagination } from "pagination-react-js";
 import StatsSkeleton from "../../components/Skeletons/StasSkeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { setStatsLoadingFalse, setStatsLoadingTrue } from "../../redux/statsSlice";
+import { setTableCompLoadingFalse, setTableCompLoadingTrue } from "../../redux/tableCompSlice";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -15,45 +18,51 @@ const Dashboard = () => {
 
   const [extensionRequests, setExtensionRequests] = useState([]);
   const [upcomingBookings, setUpcomingBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
+  const statsLoading = useSelector((state) => state.isOwnerDashboardLoading.stats.loading);
+  const tableLoading = useSelector((state) => state.isOwnerDashboardLoading.tableComp.loading);
+
+  const loading = statsLoading || tableLoading;
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 4)); // Simulate 4 seconds network delay
-      setLoading(false);
-    };
+    const fetchDashboard = async () => {
+      dispatch(setStatsLoadingTrue())
+      dispatch(setTableCompLoadingTrue())
 
-    fetchData();
-  }, []);
+      api
+        .get("/gyms/owners/stats")
+        .then((response) => {
+          setStats(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching stats:", error);
+        }).finally(
+          dispatch(setStatsLoadingFalse())
+        );
 
-  useEffect(() => {
-    api
-      .get("/gyms/owners/stats")
-      .then((response) => {
-        setStats(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching stats:", error);
-      });
+      api
+        .get("/gyms/extensions")
+        .then((res) => {
+          setExtensionRequests(res.data.extensionRequests);
+        })
+        .catch((error) => {
+          console.error("Error fetching stats:", error);
+        });
 
-    api
-      .get("/gyms/extensions")
-      .then((res) => {
-        setExtensionRequests(res.data.extensionRequests);
-      })
-      .catch((error) => {
-        console.error("Error fetching stats:", error);
-      });
+      api
+        .get("/gyms/bookings/upcoming")
+        .then((res) => {
+          setUpcomingBookings(res.data.bookings);
+        })
+        .catch((error) => {
+          console.error("Error fetching stats:", error);
+        });
 
-    api
-      .get("/gyms/bookings/upcoming")
-      .then((res) => {
-        setUpcomingBookings(res.data.bookings);
-      })
-      .catch((error) => {
-        console.error("Error fetching stats:", error);
-      });
+      dispatch(setTableCompLoadingFalse())
+    }
+    fetchDashboard()
   }, []);
 
   const handleApprove = async (request) => {
@@ -135,9 +144,8 @@ const Dashboard = () => {
               <li
                 key={index}
                 onClick={() => setActivePage(number)}
-                className={`pagination-item ${
-                  number === pageNumbers.activePage ? "active" : ""
-                }`}
+                className={`pagination-item ${number === pageNumbers.activePage ? "active" : ""
+                  }`}
               >
                 {number}
               </li>

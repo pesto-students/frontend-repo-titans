@@ -1,20 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react'
 import Slider from 'react-slick'
 import PropTypes from 'prop-types'
-import CarouselSkeleton from '../Skeletons/CarouselSkeleton'
 
 function Carousel({ images }) {
   const sliderRef = useRef(null)
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    // Simulate image loading delay
-    const loadImages = () => {
-      setTimeout(() => setLoading(false), 4000) // Adjust the delay as needed
-    }
 
-    loadImages()
-  }, [])
 
   const settings = {
     dots: true,
@@ -30,10 +21,6 @@ function Carousel({ images }) {
     if (sliderRef.current) {
       sliderRef.current.slickGoTo(index)
     }
-  }
-
-  if (loading) {
-    return <CarouselSkeleton /> // Render the skeleton while loading
   }
 
   return (
