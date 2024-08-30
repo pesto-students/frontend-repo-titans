@@ -133,7 +133,7 @@ const Search = () => {
             />
           ))}
         <div ref={ref} />
-        {isFetchingNextPage && <div>Loading more gyms...</div>}
+        {isFetchingNextPage && <div><GymCardSkeleton/></div>}
       </div>
     </div>
   );
