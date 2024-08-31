@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { MdGeneratingTokens, MdLocationOn } from "react-icons/md";
 import { FcReading } from "react-icons/fc";
-import api from '../../api/axios'
-import Carousel from '../../components/Home/Carousel';
-import GymCardHome from '../../components/Home/GymCardHome/GymCardHome';
+import api from '../../api/axios.js'
+import Carousel from '../../components/Home/Carousel.jsx';
+import GymCardHome from '../../components/Home/GymCardHome/GymCardHome.jsx';
 import homepageImage from '../../assets/images/homepage.jpg'
-import { Link } from 'react-router-dom';
 
 function Home() {
   const [location, setLocation] = useState({ lat: null, lng: null });

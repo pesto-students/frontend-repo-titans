@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { getFirstFewSentences } from '../../utils/HelperFunctions';
+import { getFirstFewSentences } from '../../utils/helperFunctions.js';
 
 const debounce = (func, delay) => {
     let timeoutId;
