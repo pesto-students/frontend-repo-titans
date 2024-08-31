@@ -1,6 +1,6 @@
 import React from 'react';
 import './GymCardHome.css';
-import { getFirstFewSentences } from '../../../utils/HelperFunctions';
+import { getFirstFewSentences } from '../../../utils/helperFunctions.js';
 
 function GymCardHome({ gym }) {
     const image1 = gym.images[0];
