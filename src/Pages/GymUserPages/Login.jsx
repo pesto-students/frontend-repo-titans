@@ -3,12 +3,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
 import { IoCloseSharp } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import signin_img from "../../assets/images/signin.jpg";
 import api from "../../api/axios.js";
-import { useGoogleLogin } from "@react-oauth/google";
+import GoogleLoginButton from "../../components/GoogleLoginButton.jsx";
 
 const Login = () => {
   const {
@@ -45,16 +44,20 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await api.post(
-        `/api/auth/login`,
-        {
+      let body = data;
+      if (data?.googleData) {
+        body = {
+          googleAccessToken: data.googleData,
+        };
+      } else {
+        body = {
           email: data.email,
           password: data.password,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+        };
+      }
+      const response = await api.post(`/api/auth/login`, body, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       // Handle successful login
       if (response.status === 200) {
@@ -89,10 +92,6 @@ const Login = () => {
       }
     }
   };
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
-  });
 
   return (
     <div className="relative flex flex-col justify-center h-screen lg:flex-row">
@@ -141,8 +140,9 @@ const Login = () => {
                     message: "Invalid email address",
                   },
                 })}
-                className={`w-full px-3 py-2 border ${errors.email ? "border-red-500" : "border-gray-600"
-                  }  bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                className={`w-full px-3 py-2 border ${
+                  errors.email ? "border-red-500" : "border-gray-600"
+                }  bg-wwbg text-white focus:outline-none focus:border-red-500`}
               />
               {errors.email && (
                 <p className="mt-1 text-sm text-red-500">
@@ -168,8 +168,9 @@ const Login = () => {
                     {...register("password", {
                       required: "Password is required",
                     })}
-                    className={`w-full px-3 py-2 border ${errors.password ? "border-red-500" : "border-gray-600"
-                      } bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                    className={`w-full px-3 py-2 border ${
+                      errors.password ? "border-red-500" : "border-gray-600"
+                    } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                   />
                   <button
                     type="button"
@@ -211,12 +212,7 @@ const Login = () => {
             <div className="flex-grow border-t border-red-600"></div>
           </div>
 
-          <button className="w-full flex items-center justify-center bg-transparent py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full mb-2 text-center border border-wwred" onClick={() => googleLogin()}>
-            <FcGoogle className="w-6 h-6 mr-2" alt="Google Logo" />
-            Continue with Google
-          </button>
-
-
+          <GoogleLoginButton onSubmit={onSubmit} />
         </div>
       </div>
 
