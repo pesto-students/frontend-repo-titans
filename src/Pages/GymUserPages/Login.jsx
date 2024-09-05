@@ -8,6 +8,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import signin_img from "../../assets/images/signin.jpg";
 import api from "../../api/axios.js";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const {
@@ -89,28 +90,32 @@ const Login = () => {
     }
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: tokenResponse => console.log(tokenResponse),
+  });
+
   return (
-    <div className="flex flex-col justify-center relative lg:flex-row h-screen">
+    <div className="relative flex flex-col justify-center h-screen lg:flex-row">
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 text-red-500"
+        className="absolute text-red-500 top-4 left-4"
       >
         <IoCloseSharp size={24} />
       </button>
 
       {/* Left side with form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 md:p-12">
-        <div className="w-full max-w-md wwbg text-white flex flex-col justify-center p-6 md:p-12 shadow-lg">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-center mb-4">
-            <h2 className="text-2xl md:text-3xl font-semibold text-center md:text-left mb-2 md:mb-0">
+      <div className="flex items-center justify-center w-full p-6 lg:w-1/2 md:p-12">
+        <div className="flex flex-col justify-center w-full max-w-md p-6 text-white shadow-lg wwbg md:p-12">
+          <div className="flex flex-col mb-4 md:flex-row md:items-center md:justify-center">
+            <h2 className="mb-2 text-2xl font-semibold text-center md:text-3xl md:text-left md:mb-0">
               Welcome back
               <span className="mx-1 font-bold text-red-700">,</span>
             </h2>
-            <h2 className="text-2xl md:text-3xl font-semibold text-center md:text-left">
+            <h2 className="text-2xl font-semibold text-center md:text-3xl md:text-left">
               Gym Goer
             </h2>
           </div>
-          <p className="text-sm text-gray-300 mb-8 text-center md:text-start">
+          <p className="mb-8 text-sm text-center text-gray-300 md:text-start">
             Don’t have an account?{" "}
             <Link to="/register" className="text-red-500 underline">
               Sign Up
@@ -120,7 +125,7 @@ const Login = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
               <label
-                className="block text-sm font-medium mb-1 wwred"
+                className="block mb-1 text-sm font-medium wwred"
                 htmlFor="email"
               >
                 Email
@@ -136,12 +141,11 @@ const Login = () => {
                     message: "Invalid email address",
                   },
                 })}
-                className={`w-full px-3 py-2 border ${
-                  errors.email ? "border-red-500" : "border-gray-600"
-                }  bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                className={`w-full px-3 py-2 border ${errors.email ? "border-red-500" : "border-gray-600"
+                  }  bg-wwbg text-white focus:outline-none focus:border-red-500`}
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.email.message}
                 </p>
               )}
@@ -149,7 +153,7 @@ const Login = () => {
 
             <div className="mb-6">
               <label
-                className="block text-sm font-medium mb-1"
+                className="block mb-1 text-sm font-medium"
                 htmlFor="password"
               >
                 Password
@@ -164,14 +168,13 @@ const Login = () => {
                     {...register("password", {
                       required: "Password is required",
                     })}
-                    className={`w-full px-3 py-2 border ${
-                      errors.password ? "border-red-500" : "border-gray-600"
-                    } bg-wwbg text-white focus:outline-none focus:border-red-500`}
+                    className={`w-full px-3 py-2 border ${errors.password ? "border-red-500" : "border-gray-600"
+                      } bg-wwbg text-white focus:outline-none focus:border-red-500`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500"
+                    className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
                   >
                     {showPassword ? (
                       <AiOutlineEye />
@@ -181,7 +184,7 @@ const Login = () => {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
+                  <p className="mt-1 text-sm text-red-500">
                     {errors.password.message}
                   </p>
                 )}
@@ -208,15 +211,17 @@ const Login = () => {
             <div className="flex-grow border-t border-red-600"></div>
           </div>
 
-          <button className="w-full flex items-center justify-center bg-transparent py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full mb-2 text-center border border-wwred">
+          <button className="w-full flex items-center justify-center bg-transparent py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wwred focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:w-full mb-2 text-center border border-wwred" onClick={() => googleLogin()}>
             <FcGoogle className="w-6 h-6 mr-2" alt="Google Logo" />
             Continue with Google
           </button>
+
+
         </div>
       </div>
 
       {/* Right side with image, hidden on mobile */}
-      <div className="hidden lg:block lg:w-1/2 bg-cover bg-center">
+      <div className="hidden bg-center bg-cover lg:block lg:w-1/2">
         <img
           src={signin_img}
           alt="Workout"
