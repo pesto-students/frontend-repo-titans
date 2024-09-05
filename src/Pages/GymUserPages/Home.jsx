@@ -125,7 +125,7 @@ function Home() {
             y="0"
           >
             <polygon
-              className="text-wwpopdiv fill-current"
+              className="fill-current text-wwpopdiv"
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>
@@ -139,7 +139,7 @@ function Home() {
           <div className="w-full px-4 pt-6 text-center lg:pt-12 md:w-4/12">
             <div className="relative flex flex-col w-full min-w-0 mb-8 break-words shadow-lg bg-wwpopdiv">
               <div className="flex-auto px-4 py-5">
-                <div className="inline-flex items-center justify-center w-12 h-12 p-3 mb-5 text-center  rounded-full shadow-lg bg-wwbg text-wwTitleRed">
+                <div className="inline-flex items-center justify-center w-12 h-12 p-3 mb-5 text-center rounded-full shadow-lg bg-wwbg text-wwTitleRed">
                   <MdGeneratingTokens size={40} />
                 </div>
                 <h6 className="text-xl font-semibold">Top-Rated Gyms</h6>
@@ -187,8 +187,8 @@ function Home() {
           <Carousel items={topGyms} />
         </div>
       </section>
-
-      <section className="hidden relative py-20" id="PopularGyms">
+      
+      <section className="relative hidden py-20" id="PopularGyms">
         <div
           className="absolute top-0 left-0 right-0 bottom-auto w-full -mt-20 overflow-hidden pointer-events-none"
           style={{ height: "80px" }}
@@ -203,7 +203,7 @@ function Home() {
             y="0"
           >
             <polygon
-              className="text-wwbg fill-current"
+              className="fill-current text-wwbg"
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>
@@ -215,7 +215,7 @@ function Home() {
               return (
                 <div
                   key={gym.gym_id}
-                  className="w-auto px-4 text-center lg:w-3/12"
+                  className="w-auto px-4 text-center lg:w-3/12" 
                 >
                   <GymCardHome gym={gym} />
                 </div>
@@ -240,7 +240,7 @@ function Home() {
             y="0"
           >
             <polygon
-              className="text-wwpopdiv fill-current"
+              className="fill-current text-wwpopdiv"
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>

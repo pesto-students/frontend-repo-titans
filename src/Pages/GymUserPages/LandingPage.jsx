@@ -183,7 +183,7 @@ function LandingPage() {
                   style={{ maxWidth: "120px" }}
                 />
                 <div className="pt-6 text-center">
-                  <h5 className="text-xl font-bold flex flex-col">
+                  <h5 className="flex flex-col text-xl font-bold">
                     <span>Muhammadh</span> <span>Kamaruddheen</span>
                   </h5>
                   <p className="mt-1 text-sm font-semibold text-gray-500 uppercase">
@@ -197,11 +197,11 @@ function LandingPage() {
                 <img
                   alt="Picture of Dev Saini"
                   src="...."
-                  className="max-w-full mx-auto rounded-full shadow-lg grayscale"
+                  className="max-w-full mx-auto rounded-full shadow-lg grayscale "
                   style={{ maxWidth: "120px" }}
                 />
                 <div className="pt-6 text-center">
-                  <h5 className="text-xl font-bold flex flex-col">Dev Saini</h5>
+                  <h5 className="flex flex-col text-xl font-bold">Dev Saini</h5>
                   <p className="mt-1 text-sm font-semibold text-gray-500 uppercase">
                     Software Developer
                   </p>
