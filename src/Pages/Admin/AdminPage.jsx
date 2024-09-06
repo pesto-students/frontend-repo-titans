@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import api from '../../api/axios';
-import Carousel from '../../components/GymDetails/Carousel';
 import { FaArrowLeft, FaArrowRight, FaCheck, FaTimes } from 'react-icons/fa';
 import moment from 'moment';
 
+const Carousel = lazy(()=> import('../../components/GymDetails/Carousel'))
 
 const GymDetails = ({ gym, handlePrev, handleNext, handleApprove, handleDeny, page, totalPages }) => {
     return (

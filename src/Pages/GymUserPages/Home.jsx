@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { MdGeneratingTokens, MdLocationOn } from "react-icons/md";
 import { FaBookOpenReader } from "react-icons/fa6";
 import api from "../../api/axios.js";
-import Carousel from "../../components/Home/Carousel.jsx";
-import GymCardHome from "../../components/Home/GymCardHome/GymCardHome.jsx";
+
 import homepageImage from "../../assets/images/homepage.jpg";
+
+const Carousel = lazy(()=>import('../../components/Home/Carousel.jsx'))
+const GymCardHome = lazy(()=>import('../../components/Home/GymCardHome/GymCardHome.jsx'))
 
 function Home() {
   const [location, setLocation] = useState({ lat: null, lng: null });

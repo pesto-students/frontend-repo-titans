@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import api from "../../api/axios.js";
 import { usePagination } from "pagination-react-js";
-import TableComponent from "../../components/Bookings/TableComponent.jsx";
-import TodaysBookingSection from "../../components/Bookings/TodaysBookingSection.jsx";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { setTodayBookingLoadingFalse, setTodayBookingLoadingTrue } from "../../redux/todayBookingSlice.js";
 import { setTableCompLoadingFalse, setTableCompLoadingTrue } from "../../redux/tableCompSlice.js";
-import BookingsPageSkeleton from "../../components/Skeletons/BookingsPageSkeleton.jsx";
+
+const BookingsPageSkeleton = lazy(() => import("../../components/Skeletons/BookingsPageSkeleton.jsx"));
+const TableComponent = lazy(() => import("../../components/Bookings/TableComponent.jsx"));
+const TodaysBookingSection = lazy(() => import("../../components/Bookings/TodaysBookingSection.jsx"));
 
 function Bookings() {
   const [todayBookings, setTodayBookings] = useState([]);
