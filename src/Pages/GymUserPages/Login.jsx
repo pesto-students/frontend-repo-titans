@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,7 +7,9 @@ import { IoCloseSharp } from "react-icons/io5";
 import useAuth from "../../hooks/useAuth";
 import signin_img from "../../assets/images/signin.jpg";
 import api from "../../api/axios.js";
-import GoogleLoginButton from "../../components/GoogleLoginButton.jsx";
+
+const GoogleLoginButton = lazy(() => import("../../components/GoogleLoginButton.jsx"));
+
 
 const Login = () => {
   const {

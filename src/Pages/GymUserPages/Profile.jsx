@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth"; // Custom hook for authentication
 import profile_img from "../../assets/svg/profile.svg";
 import { toast } from "react-toastify";
 import api from "../../api/axios.js";
-import ProfileSkeleton from "../../components/Skeletons/ProfileSkeleton.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setProfileLoadingFalse,
   setProfileLoadingTrue,
 } from "../../redux/profileSkeleton.js";
+
+const ProfileSkeleton = lazy(() => import("../../components/Skeletons/ProfileSkeleton.jsx"));
+
 
 // List of allowed MIME types and file extensions
 const allowedTypes = [

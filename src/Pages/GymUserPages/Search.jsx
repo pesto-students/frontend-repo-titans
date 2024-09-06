@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import GymCard from "../../components/Search/GymCard";
-import SearchPanel from "../../components/Search/SearchPanel";
+
 import "react-loading-skeleton/dist/skeleton.css";
 import api from "../../api/axios";
-import GymCardSkeleton from "../../components/Skeletons/GymCardSkeleton";
 import { debounce } from "lodash";
 import { toast } from "react-toastify";
+
+const GymCard = lazy(() => import("../../components/Search/GymCard"));
+const SearchPanel = lazy(() => import("../../components/Search/SearchPanel"));
+const GymCardSkeleton = lazy(() => import("../../components/Skeletons/GymCardSkeleton"));
+
 
 const Search = () => {
   const [gymsToRender, setGymsToRender] = useState([]);
@@ -46,7 +49,7 @@ const Search = () => {
     if (location) {
       params.city = location
     }
-  
+
     // Use coordinates as default if available
     if (coordinates.latitude && coordinates.longitude) {
       params.latitude = coordinates.latitude;
@@ -54,20 +57,20 @@ const Search = () => {
     } else if (location) {
       params.city = location;
     }
-  
+
     // Add sorting criteria if provided
     if (sort) {
       params.sort_by = sort;
     }
-  
+
     // Include the page parameter
     params.page = pageParam;
-  
+
     const res = await api.get("/gyms", { params });
-  
+
     // Log total pages and current page number
     console.log(`Total Pages: ${res.data.totalPages}, Current Page: ${pageParam}`);
-  
+
     return res.data;
   };
 
@@ -137,14 +140,14 @@ const Search = () => {
         {isLoading || gymsToRender.length === 0
           ? Array(6).fill(null).map((_, index) => <GymCardSkeleton key={index} />)
           : displayedGyms.map((gym) => (
-              <GymCard
-                key={gym._id}
-                gymId={gym._id}
-                gymName={gym.gym_name}
-                imageSrc={gym.images[0]}
-                rating={gym.average_rating}
-              />
-            ))}
+            <GymCard
+              key={gym._id}
+              gymId={gym._id}
+              gymName={gym.gym_name}
+              imageSrc={gym.images[0]}
+              rating={gym.average_rating}
+            />
+          ))}
         <div ref={ref} />
         {isFetchingNextPage && <GymCardSkeleton />}
       </div>

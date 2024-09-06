@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import GymForm1 from "../../components/GymForm/GymForm1";
-import GymForm2 from "../../components/GymForm/GymForm2";
 import api from "../../api/axios.js";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.jsx";
+
+const GymForm1 = lazy(() => import("../../components/GymForm/GymForm1.jsx"));
+const GymForm2 = lazy(() => import("../../components/GymForm/GymForm2.jsx"));
+
 
 const GymForm = () => {
   const [currentForm, setCurrentForm] = useState("form1");

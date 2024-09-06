@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy } from "react";
 import { FaChartBar, FaDollarSign, FaClock, FaUser } from "react-icons/fa";
 import api from "../../api/axios";
-import TableComponent from "../../components/Bookings/TableComponent";
+
 import { usePagination } from "pagination-react-js";
-import StatsSkeleton from "../../components/Skeletons/StasSkeleton";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setStatsLoadingFalse,
@@ -16,6 +15,10 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+
+const TableComponent = lazy(() => import("../../components/Bookings/TableComponent"));
+const StatsSkeleton = lazy(() => import("../../components/Skeletons/StatsSkeleton"));
+
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
