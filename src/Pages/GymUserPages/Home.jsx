@@ -4,9 +4,12 @@ import { FaBookOpenReader } from "react-icons/fa6";
 import api from "../../api/axios.js";
 
 import homepageImage from "../../assets/images/homepage.jpg";
+import BlogSection from "../../components/Home/BlogSection.jsx";
 
-const Carousel = lazy(()=>import('../../components/Home/Carousel.jsx'))
-const GymCardHome = lazy(()=>import('../../components/Home/GymCardHome/GymCardHome.jsx'))
+const Carousel = lazy(() => import("../../components/Home/Carousel.jsx"));
+const GymCardHome = lazy(() =>
+  import("../../components/Home/GymCardHome/GymCardHome.jsx")
+);
 
 function Home() {
   const [location, setLocation] = useState({ lat: null, lng: null });
@@ -189,7 +192,7 @@ function Home() {
           <Carousel items={topGyms} />
         </div>
       </section>
-      
+
       <section className="relative hidden py-20" id="PopularGyms">
         <div
           className="absolute top-0 left-0 right-0 bottom-auto w-full -mt-20 overflow-hidden pointer-events-none"
@@ -217,7 +220,7 @@ function Home() {
               return (
                 <div
                   key={gym.gym_id}
-                  className="w-auto px-4 text-center lg:w-3/12" 
+                  className="w-auto px-4 text-center lg:w-3/12"
                 >
                   <GymCardHome gym={gym} />
                 </div>
@@ -248,25 +251,7 @@ function Home() {
           </svg>
         </div>
 
-        <div className="container px-4 mx-auto lg:pt-24 lg:pb-64">
-          <div className="flex flex-wrap justify-center text-center">
-            <div className="w-full px-4 lg:w-6/12">
-              <h2 className="text-4xl font-semibold text-wwtext">
-                Elevate Your Fitness Knowledge
-              </h2>
-              <p className="mt-4 mb-4 text-lg leading-relaxed text-gray-500">
-                Put the potentially record low maximum sea ice extent tihs year
-                down to low ice. According to the National Oceanic and
-                Atmospheric Administration, Ted, Scambos.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col justify-around h-full m-20 md:flex-row ">
-            <div className="h-full bg-red-400">Blog</div>
-            <div className="h-full bg-yellow-300">image</div>
-          </div>
-        </div>
+        <BlogSection />
       </section>
     </main>
   );
