@@ -7,7 +7,6 @@ import useAuth from "../../hooks/useAuth.jsx";
 import api from "../../api/axios.js";
 import GoogleLoginButton from "../../components/GoogleLoginButton.jsx";
 
-
 const Login = () => {
   const {
     register,
@@ -60,9 +59,9 @@ const Login = () => {
       if (response.status === 200) {
         toast.success(response.data.message);
 
-        console.log("Logged In data : ", response.data);
+        // console.log("Logged In data : ", response.data);
         const { status, reason } = response.data;
-        console.log(reason, status);
+        // console.log(reason, status);
 
         login(response.data.token, status);
 

@@ -6,8 +6,9 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
 import signup_img from "../../assets/images/signup.jpg";
 import api from "../../api/axios.js";
-const GoogleLoginButton = lazy(() => import("../../components/GoogleLoginButton.jsx"));
-
+const GoogleLoginButton = lazy(() =>
+  import("../../components/GoogleLoginButton.jsx")
+);
 
 const Register = () => {
   const {

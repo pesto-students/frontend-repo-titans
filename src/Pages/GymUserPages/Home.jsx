@@ -27,8 +27,8 @@ function Home() {
             lng: position.coords.longitude,
           });
 
-          console.log(location.lat);
-          console.log(location.lng);
+          // console.log(location.lat);
+          // console.log(location.lng);
         },
         (error) => {
           setError(error.message);
@@ -50,7 +50,7 @@ function Home() {
               longitude: location.lng,
             },
           });
-          console.log(response.data);
+          // console.log(response.data);
           setPopularGyms(response.data);
         } catch (error) {
           setError("Error fetching gym details");
@@ -70,7 +70,7 @@ function Home() {
             limit: 3,
           },
         });
-        console.log("topgyms: ", response.data.gyms);
+        // console.log("topgyms: ", response.data.gyms);
         setTopGyms(response.data.gyms);
       } catch (error) {
         setError("Error fetching gym details");

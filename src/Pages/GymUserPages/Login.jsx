@@ -8,8 +8,9 @@ import useAuth from "../../hooks/useAuth";
 import signin_img from "../../assets/images/signin.jpg";
 import api from "../../api/axios.js";
 
-const GoogleLoginButton = lazy(() => import("../../components/GoogleLoginButton.jsx"));
-
+const GoogleLoginButton = lazy(() =>
+  import("../../components/GoogleLoginButton.jsx")
+);
 
 const Login = () => {
   const {
@@ -66,7 +67,7 @@ const Login = () => {
         toast.success(response.data.message);
         login(response.data.token);
 
-        // console.log('Logged In data : ', response.data)
+        // console.log("Logged In data : ", response.data);
         // Set a flag indicating the user has logged in
         const isFirstTimeUser = localStorage.getItem("firstTimeUser") || true;
 
@@ -78,7 +79,7 @@ const Login = () => {
           // Update local storage to indicate the user has logged in
           localStorage.setItem("firstTimeUser", "false");
         } else {
-          console.log("Im coming here to else part with from", from);
+          // console.log("Im coming here to else part with from", from);
           navigate(from, { replace: true });
         }
       }

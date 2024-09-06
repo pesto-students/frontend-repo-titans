@@ -16,9 +16,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
-const TableComponent = lazy(() => import("../../components/Bookings/TableComponent"));
-const StatsSkeleton = lazy(() => import("../../components/Skeletons/StatsSkeleton"));
-
+const TableComponent = lazy(() =>
+  import("../../components/Bookings/TableComponent")
+);
+const StatsSkeleton = lazy(() =>
+  import("../../components/Skeletons/StatsSkeleton")
+);
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -92,8 +95,8 @@ const Dashboard = () => {
 
   const handleApprove = async (request) => {
     try {
-      console.log(request._id);
-      console.log(request);
+      // console.log(request._id);
+      // console.log(request);
       await api.patch(`/bookings/extends`, {
         extensionId: request._id,
         status: "approved",

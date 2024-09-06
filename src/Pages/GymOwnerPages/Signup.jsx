@@ -4,8 +4,9 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import api from "../../api/axios.js";
-const GoogleLoginButton = lazy(() => import("../../components/GoogleLoginButton.jsx"));
-
+const GoogleLoginButton = lazy(() =>
+  import("../../components/GoogleLoginButton.jsx")
+);
 
 const Signup = () => {
   const {
